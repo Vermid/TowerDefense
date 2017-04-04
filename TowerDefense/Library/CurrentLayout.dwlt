@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 442}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -42,12 +42,12 @@ MonoBehaviour:
     height: 257
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
-  m_ActualView: {fileID: 14}
+  m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
   - {fileID: 14}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 1117
-  m_MinSize: {x: 950, y: 442}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &7
 MonoBehaviour:
@@ -286,7 +286,7 @@ MonoBehaviour:
   - {fileID: 19}
   - {fileID: 20}
   m_Selected: 0
-  m_LastSelected: 0
+  m_LastSelected: 1
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -418,14 +418,14 @@ MonoBehaviour:
     width: 1003
     height: 789
   m_SceneLighting: 1
-  lastFramingTime: 4165.899028149034
+  lastFramingTime: 2240.8564822277085
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 49.124664, y: -33.87265, z: 16.360386}
+    m_Target: {x: 12.521957, y: -4.850628, z: 42.40535}
     speed: 2
-    m_Value: {x: 49.124664, y: -33.87265, z: 16.360386}
+    m_Value: {x: 12.521957, y: -4.850628, z: 42.40535}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -448,13 +448,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.0035257759, y: 0.9141478, z: -0.40528786, w: -0.0079523185}
+    m_Target: {x: -0.019506067, y: 0.90018636, z: -0.4331755, w: -0.040535748}
     speed: 2
-    m_Value: {x: -0.0035257759, y: 0.9141478, z: -0.40528786, w: -0.0079523185}
+    m_Value: {x: -0.019506067, y: 0.9001863, z: -0.43317547, w: -0.040535748}
   m_Size:
-    m_Target: 146.44504
+    m_Target: 69.92127
     speed: 2
-    m_Value: 146.44504
+    m_Value: 69.92127
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -493,9 +493,9 @@ MonoBehaviour:
     height: 789
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
+    m_SelectedIDs: f2f1ffff
     m_LastClickedID: 0
-    m_ExpandedIDs: 00cdffffeadaffffdafbffff0000000084350000
+    m_ExpandedIDs: dafbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -555,7 +555,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts
+    - Assets/materials
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
@@ -566,7 +566,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5e220000
     m_LastClickedID: 8798
-    m_ExpandedIDs: 00000000cc240000fa24000004250000222500006225000068250000842500009a250000b6250000d0250000d4250000d6250000f02500006c2b00006e2b0000702b0000722b0000
+    m_ExpandedIDs: 00000000cc240000fa240000182500006225000068250000b8250000d6250000d8250000f22500006e2b0000702b0000722b0000742b0000762b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -594,21 +594,21 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000cc240000fa2400006225000068250000b6250000d4250000d6250000f02500006c2b00006e2b0000702b0000722b00008c2b0000
+    m_ExpandedIDs: 00000000cc240000fa240000182500006225000068250000b8250000d2250000d6250000d8250000f22500006e2b0000702b0000722b0000742b0000762b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Waypoints
-      m_OriginalName: Waypoints
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 1528
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_SearchString: 
@@ -730,7 +730,7 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 1570
+    x: 1645
     y: 92
-    width: 350
-    height: 926
+    width: 275
+    height: 789
