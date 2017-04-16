@@ -6,37 +6,15 @@ public class ObjectPool_Zaim : MonoBehaviour
 {
     #region Inspector
     [SerializeField]
-    private string objectOneString;
-    [SerializeField]
-    private string objectTwoString;
-    [SerializeField]
-    private string objectThreeString;
-    [SerializeField]
-    private string objectFourString;
-    [SerializeField]
-    private GameObject objectOneGameObject;
-    [SerializeField]
-    private GameObject objectTwoGameObject;
-    [SerializeField]
-    private GameObject objectThreeGameObject;
-    [SerializeField]
-    private GameObject objectFourGameObject;
-    [SerializeField]
     private int listSize = 10;
     [SerializeField]
-    private bool canGrow = false;
-
+    private List<GameObject> listOfGameObjects = new List<GameObject>();
     #endregion
-    private List<GameObject> enemyOne = new List<GameObject>();
     private Dictionary<string, List<GameObject>> ObjectPoolByName;
+    private List<GameObject> gameObjectsList;
+
     public static ObjectPool_Zaim current;
 
-
-    //damn dont forget this again 
-    //if you use a dictionary list for more enemys
-    private List<GameObject> enemyTwo = new List<GameObject>();
-    private List<GameObject> enemyThree = new List<GameObject>();
-    private List<GameObject> enemyFour = new List<GameObject>();
 
     void Awake()
     {
@@ -53,62 +31,53 @@ public class ObjectPool_Zaim : MonoBehaviour
     private void InitializeDictionary()
     {
         ObjectPoolByName = new Dictionary<string, List<GameObject>>();
-        for (int i = 0; i < listSize; i++)
+        //loop the Inspector list
+        foreach (GameObject gobj in listOfGameObjects)
         {
-            GameObject obj = (GameObject)Instantiate(objectOneGameObject);
-            obj.SetActive(false);
-            enemyOne.Add(obj);
+            //check if the list is hight than the gameobjects set
+            if (gobj != null)
+            {
+                gameObjectsList = new List<GameObject>();
+                for (int i = 0; i < listSize; i++)
+                {
+                    GameObject obj = (GameObject)Instantiate(gobj);
+                    obj.SetActive(false);
+                    gameObjectsList.Add(obj);
+                }
+                ObjectPoolByName.Add(gobj.name, gameObjectsList);
+            }
         }
-        ObjectPoolByName.Add(objectOneString, enemyOne);
-
-        for (int i = 0; i < listSize; i++)
-        {
-            GameObject obj = (GameObject)Instantiate(objectTwoGameObject);
-            obj.SetActive(false);
-            enemyTwo.Add(obj);
-        }
-        ObjectPoolByName.Add(objectTwoString, enemyTwo);
-
-        for (int i = 0; i < listSize; i++)
-        {
-            GameObject obj = (GameObject)Instantiate(objectThreeGameObject);
-            obj.SetActive(false);
-            enemyThree.Add(obj);
-        }
-        ObjectPoolByName.Add(objectThreeString, enemyThree);
-
-        for (int i = 0; i < listSize; i++)
-        {
-            GameObject obj = (GameObject)Instantiate(objectFourGameObject);
-            obj.SetActive(false);
-            enemyFour.Add(obj);
-        }
-        ObjectPoolByName.Add(objectFourString, enemyFour);
     }
 
     /// <summary>
     /// search for the "wantedGameObjectName" and returns a Gameobject if there is one that isn't activated else null
     /// </summary>
-    /// <param name="wantedGameObjectName"></param>
+    /// <param name="wantedGameObject"></param>
     /// <returns></returns>
-    public GameObject GetPoolObject(string wantedGameObjectName)
+    public GameObject GetPoolObject(string wantedGameObject, bool canGrow)
     {
-        if (ObjectPoolByName.ContainsKey(wantedGameObjectName))
+        if (ObjectPoolByName.ContainsKey(wantedGameObject))
         {
-            foreach (var keyVal in ObjectPoolByName)
+            var value = ObjectPoolByName[wantedGameObject];
+            for (int i = 0; i < value.Count; i++)
             {
-                if (keyVal.Key == wantedGameObjectName)
+                //check if the elementList[i] is activ or not
+                if (value[i].activeInHierarchy == false)
                 {
-                    var elementList = ObjectPoolByName[wantedGameObjectName];
-                    for (int i = 0; i < elementList.Count; i++)
-                    {
-                        //check if the elementList[i] is activ or not
-                        if (elementList[i].activeInHierarchy == false)
-                        {
-                            return elementList[i];
-                        }
-                    }
+                    return value[i];
                 }
+            }
+            //if can Grow is true The Lists will add more Gameobjects
+            if (canGrow)
+            {
+                //save the value from the dictionary by writing the wanted key
+                //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
+                GameObject obj = (GameObject)Instantiate(value[0]);
+                obj.SetActive(false);
+                //add the new map to the list from the value
+                // wyh did i add this?
+                value.Add(obj);
+                return obj;
             }
         }
         return null;
