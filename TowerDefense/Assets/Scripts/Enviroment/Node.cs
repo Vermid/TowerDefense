@@ -6,6 +6,8 @@ public class Node : MonoBehaviour
 {
     [SerializeField]
     private Color hoverColor;
+    [SerializeField]
+    private Color notEnoughMoneyColor;
 
     [SerializeField]
     private Vector3 positionOffset;
@@ -39,13 +41,20 @@ public class Node : MonoBehaviour
 
     void OnMouseEnter()
     {//hver ui element
-        if(EventSystem.current.IsPointerOverGameObject())
+        if (EventSystem.current.IsPointerOverGameObject())
             return;
-        
+
         if (!buildManager.CanBuild)
             return;
-        //change the color from the node
-        rend.material.color = hoverColor;
+        if (buildManager.HasMoney)
+        {
+            //change the color from the node
+            rend.material.color = hoverColor;
+        }
+        else
+        {
+            rend.material.color = notEnoughMoneyColor;
+        }
     }
 
     void OnMouseExit()

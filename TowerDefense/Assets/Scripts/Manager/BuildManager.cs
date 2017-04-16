@@ -26,6 +26,12 @@ public class BuildManager : MonoBehaviour
         get { return turretToBuild != null; }
     }
 
+    public bool HasMoney {
+        //if turrettobuild is null there is no turret on this position
+        get { return PlayerStarts.money >= turretToBuild.cost ; }
+    }
+
+
     public void BuildTurretOn(Node node)
     {
         //if the player has the money to buy the turret
