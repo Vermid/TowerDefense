@@ -75,7 +75,7 @@ public class TouchCamera : MonoBehaviour
         //    }
         //}
 
-        //        Move_Camera();
+                Move_Camera();
 
         if (Input.touchCount == 0)
         {
@@ -197,10 +197,10 @@ public class TouchCamera : MonoBehaviour
         Debug.Log("mapMinY" + mapMinY);
 
         transform.position += new Vector3(Input.GetAxisRaw("Horizontal") * 5, 0, Input.GetAxisRaw("Vertical") * 5);
-        transform.position = new Vector3(
-             Mathf.Clamp(transform.position.x, -32.5651F + (camera.orthographicSize + 4), 112.3136F - (camera.orthographicSize + 4)),
-            Mathf.Clamp(transform.position.y, -10, 100),
-            Mathf.Clamp(transform.position.z, 108, 122));
+        //transform.position = new Vector3(
+        //     Mathf.Clamp(transform.position.x, -32.5651F + (camera.orthographicSize + 4), 112.3136F - (camera.orthographicSize + 4)),
+        //    Mathf.Clamp(transform.position.y, -10, 100),
+        //    Mathf.Clamp(transform.position.z, 108, 122));
         //87.778F , -0.626F ));
     }
 }
