@@ -6,13 +6,13 @@ using UnityEngine;
 public class BuildManager : MonoBehaviour
 {
     private TurrretBluePrint turretToBuild;
+    private Node selectedNode;
+
     [SerializeField]
-    public GameObject standartTurretPrefab;
-    [SerializeField]
-    public GameObject missileTurretPrefab;
+    public GameObject buildEffect;
 
     public static BuildManager instance;
-
+    public NodeUI nodeUi;
     void Awake()
     {
         if (instance != null)
@@ -26,9 +26,10 @@ public class BuildManager : MonoBehaviour
         get { return turretToBuild != null; }
     }
 
-    public bool HasMoney {
+    public bool HasMoney
+    {
         //if turrettobuild is null there is no turret on this position
-        get { return PlayerStarts.money >= turretToBuild.cost ; }
+        get { return PlayerStarts.money >= turretToBuild.cost; }
     }
 
 
@@ -43,16 +44,49 @@ public class BuildManager : MonoBehaviour
 
         PlayerStarts.money -= turretToBuild.cost;
         //should we use the pool here? 
-        GameObject turret = (GameObject) Instantiate(turretToBuild.prefab, node.GetBuildPosition(), Quaternion.identity);
+        GameObject turret = (GameObject)Instantiate(turretToBuild.prefab, node.GetBuildPosition(), Quaternion.identity);
 
         node.turret = turret;
 
-        Debug.Log("Turret build!! Money left: "+ PlayerStarts.money);
+        Debug.Log("Turret build!! Money left: " + PlayerStarts.money);
+
+        GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(buildEffect.name);
+
+        if (gobj == null)
+            return;
+
+        gobj.transform.position = node.transform.position;
+        gobj.transform.rotation = node.transform.rotation;
+        gobj.SetActive(true);
+
+        turretToBuild = null;
+        selectedNode = null; //may delete this
+    }
+
+    public void SelectNode(Node node)
+    {
+        if (selectedNode == node)
+        {
+            DeselectNode();
+            return;
+        }
+
+        selectedNode = node;
+        turretToBuild = null;
+
+        nodeUi.SetTarget(node);
+    }
+
+    public void DeselectNode()
+    {
+        selectedNode = null;
+        nodeUi.Hide();
     }
 
     public void SelectTurretToBuild(TurrretBluePrint turret)
     {
         //set the turret to buils
         turretToBuild = turret;
+        DeselectNode();
     }
 }

@@ -6,6 +6,8 @@ public class Shop : MonoBehaviour
 
     public TurrretBluePrint standradTurret;
     public TurrretBluePrint missileTurret;
+    public TurrretBluePrint laserTurret;
+    public TurrretBluePrint mineFactory;
 
     void Start()
     {
@@ -23,4 +25,18 @@ public class Shop : MonoBehaviour
         buildManager.SelectTurretToBuild(missileTurret);
         Debug.Log("Missile");
     }
+
+    //call comes from GUI
+    public void SelectLaserTurret()
+    {
+        buildManager.SelectTurretToBuild(laserTurret);
+        Debug.Log("Laser");
+    }
+
+    public void SelectMineFactory()
+    {
+        buildManager.SelectTurretToBuild(mineFactory);
+        Debug.Log("MineFactory");
+    }
+
 }

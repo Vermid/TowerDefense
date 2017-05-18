@@ -1,5 +1,6 @@
 ﻿#region Using/Import
 
+using System.Collections;
 using UnityEngine;
 
 #endregion
@@ -7,13 +8,13 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField]
-    private bool canGrow = false;
-
-    [SerializeField]
     private float speed = 70f;
 
     [SerializeField]
     private float splashRadius = 0;
+
+    [SerializeField]
+    private int damage = 50;
 
     [SerializeField]
     private GameObject impactEffect = null;
@@ -30,7 +31,6 @@ public class Bullet : MonoBehaviour
     {
         if (target == null)
         {
-            gameObject.SetActive(false);
             return;
         }
 
@@ -43,47 +43,52 @@ public class Bullet : MonoBehaviour
         {
             HitTarget();
         }
+
         //sets the speed from the bullet
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+
         transform.LookAt(target);
+
     }
 
+    bool CheckTarget()
+    {
+        //expand this in a functon
+        if (!target.gameObject.activeInHierarchy)
+        {
+            GameObject effect = ObjectPool_Zaim.current.GetPoolObject(impactEffect.name);
+
+            if (effect == null)
+                return false;
+
+            effect.transform.position = transform.position;
+            effect.transform.rotation = transform.rotation;
+            effect.SetActive(true);
+
+            gameObject.SetActive(false);
+            return false;
+        }
+        return true;
+    }
     private void HitTarget()
     {
         if (splashRadius > 0f)
         {
             Explode();
-
-            GameObject effectExplode = ObjectPool_Zaim.current.GetPoolObject(impactEffect.name, canGrow);
-
-            if (effectExplode == null)
-                return;
-
-            effectExplode.transform.position = transform.position;
-            effectExplode.transform.rotation = transform.rotation;
-
-            if (effectExplode.transform.childCount != 0)
-            {
-                for (int i = 0; i < effectExplode.transform.childCount; i++)
-                {
-                    effectExplode.transform.GetChild(i).gameObject.SetActive(true);
-                }
-            }
-            effectExplode.SetActive(true);
         }
         else
         {
             Damage(target);
-
-            GameObject effectInstance = ObjectPool_Zaim.current.GetPoolObject(impactEffect.name, canGrow);
-
-            if (effectInstance == null)
-                return;
-
-            effectInstance.transform.position = transform.position;
-            effectInstance.transform.rotation = transform.rotation;
-            effectInstance.SetActive(true);
         }
+        GameObject effect = ObjectPool_Zaim.current.GetPoolObject(impactEffect.name);
+
+        if (effect == null)
+            return;
+
+        effect.transform.position = transform.position;
+        effect.transform.rotation = transform.rotation;
+        effect.SetActive(true);
+
         gameObject.SetActive(false);
     }
 
@@ -96,8 +101,9 @@ public class Bullet : MonoBehaviour
         {
             //check in a foreac for every enemy that is inside 
             //this is also needed for a laser later
-            if (collider.tag == "Enemy")
+            if (collider.tag == ConstNames.Enemy)
             {
+                // pass the collider that gets the damage
                 Damage(collider.transform);
             }
         }
@@ -105,8 +111,11 @@ public class Bullet : MonoBehaviour
 
     private void Damage(Transform enemy)
     {
-        //kill or damage the enemy
-        enemy.gameObject.SetActive(false);
+        Enemy e = enemy.GetComponent<Enemy>();
+        if (e != null)
+        {
+            e.TakeDamage(damage);
+        }
     }
 
     private void OnDrawGizmosSelected()
