@@ -1,28 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using UnityEngine.UI;
+
 public class WaveSpawner : MonoBehaviour
 {
     #region Inspector
-    [SerializeField]
-    private Transform enemyPrefab;
+
     [SerializeField]
     private Transform spawnPoint;
     [SerializeField]
-    private string enemyName = "";
-    [SerializeField]
-    private string enemyCapsule = "";
-    [SerializeField]
     private float timeBetweenWaves = 5F;
     [SerializeField]
-    private bool canGrow = false;
+    private int objectCounter = 10;
+    [SerializeField]
+    private List<GameObject> listOfGameObjects = new List<GameObject>();
+    [SerializeField]
+    private List<int> enemyCounter = new List<int>();
+
     #endregion
 
     private float countDown = 2F;
-    private int waveIndex = 0;
 
     public Text WaveCoundownText;
+    private int waveIndex = 0;
 
     void Update()
     {
@@ -35,54 +38,63 @@ public class WaveSpawner : MonoBehaviour
         }
         //count in seconds?
         countDown -= Time.deltaTime; //time past since last frames
+
+        countDown = Mathf.Clamp(countDown, 0f, Mathf.Infinity);
+
         //show the countdown into the text Object
-        WaveCoundownText.text = Mathf.Round(countDown).ToString();
+        // WaveCoundownText.text = Mathf.Round(countDown).ToString();
+        //string format to show a better contdown 
+        WaveCoundownText.text = string.Format("{0:00.00}", countDown);
     }
 
 
     IEnumerator SpawnWave()
     {
-        //increment the waveIndex
-        waveIndex++;
-        //check if the enemyName is Set
-        if (enemyName.Length != 0)
+
+        //TODO: this works for now change it later 
+        //loop the Inspector list
+        foreach (GameObject gobj in listOfGameObjects)
         {
-            for (int i = 0; i < waveIndex; i++)
+            if (waveIndex != 0)
             {
-                //call the funktion and pas the wanted enemysName into
-                SpawnEnemy(enemyName);
-                //wait .5 seconds for the next Enemy
-                yield return new WaitForSeconds(.5F);
+                objectCounter += 1;
             }
-        }
-        //wait 1 Second for the next type of enemys
-        yield return new WaitForSeconds(1);
-        if (enemyCapsule.Length != 0)
-        {
-            for (int i = 0; i < waveIndex; i++)
+            //check if the list is hight than the gameobjects set
+            if (gobj != null)
             {
-                SpawnEnemy(enemyCapsule);
-                yield return new WaitForSeconds(.5F);
+                for (int i = 0; i < enemyCounter.Count;)
+                {
+                    if(SpawnEnemy(gobj.name))
+                        i++; 
+                    yield return new WaitForSeconds(.1F);
+                }
             }
+            waveIndex++;
         }
     }
+
     /// <summary>
     /// Wants the Enemy Name "Fast" or "Heavy".
     /// this gets than a gameobject of the enemy type and move the positiona and rotaten and set it than to true
     /// </summary>
     /// <param name="name"></param>
-    void SpawnEnemy(string name)
+    bool SpawnEnemy(string name)
     {
         //get from the pool a single gameobject from Type of the wanted name  "Fast","Heavy",etc
-        GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name, canGrow);
+        GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name);
         if (obj == null)
-            return;
+            return false;
+        var spawn = obj.GetComponent<Enemy>().GetRespawnTimer();
+        Debug.Log(spawn);
+        if (!spawn)
+            return false;
+
         //sets the position from the map
         obj.transform.position = spawnPoint.transform.position;
         //sets the Rotation from the map
         obj.transform.rotation = spawnPoint.transform.rotation;
         //activates the map
         obj.SetActive(true);
-        //Instantiate(enemyPrefab,spawnPoint.position,spawnPoint.rotation);
+        return true;
     }
 }
