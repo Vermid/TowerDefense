@@ -14,12 +14,9 @@ public class TouchCamera : MonoBehaviour
 
 
     //mapX, mapY is size of background image
-    private float mapMaxX;
-    private float mapMaxY;
-    private float mapMinY;
-    private float mapMinX;
+
     public GameObject map;
-    private BoxCollider mapCollider;
+    //private BoxCollider mapCollider;
     public float touchSpeed = 1;
     public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
     public float orthoZoomSpeed = 0.5f;        // The rate of change of the orthographic size in orthographic mode.
@@ -28,7 +25,7 @@ public class TouchCamera : MonoBehaviour
     void Start()
     {
         camera = GetComponent<Camera>();
-        mapCollider = map.GetComponentInChildren<BoxCollider>();
+      //  mapCollider = map.GetComponentInChildren<BoxCollider>();
     }
 
 
@@ -171,7 +168,6 @@ public class TouchCamera : MonoBehaviour
         float xvalue = Mathf.Abs(oldPos.x - currentPos.x);
         float yvalue = Mathf.Abs(oldPos.y - currentPos.y);
         Vector2 dir = new Vector2(xvalue, yvalue);
-        Debug.Log(dir + "Lookat");
         //   if(currentPos.x >-32 && currentPos.x < 112)
         transform.Translate(dir * panSpeed * Time.deltaTime, Space.World);
 
@@ -187,14 +183,10 @@ public class TouchCamera : MonoBehaviour
     }
     public void Move_Camera()
     {
-        mapMaxX = mapCollider.bounds.max.x;
-        mapMaxY = mapCollider.bounds.max.y;
-        mapMinX = mapCollider.bounds.min.x;
-        mapMinY = mapCollider.bounds.min.y;
-        Debug.Log("mapMaxX" + mapMaxX);
-        Debug.Log("mapMinX" + mapMinX);
-        Debug.Log("mapMaxY" + mapMaxY);
-        Debug.Log("mapMinY" + mapMinY);
+        //mapMaxX = mapCollider.bounds.max.x;
+        //mapMaxY = mapCollider.bounds.max.y;
+        //mapMinX = mapCollider.bounds.min.x;
+        //mapMinY = mapCollider.bounds.min.y;
 
         transform.position += new Vector3(Input.GetAxisRaw("Horizontal") * 5, 0, Input.GetAxisRaw("Vertical") * 5);
         //transform.position = new Vector3(

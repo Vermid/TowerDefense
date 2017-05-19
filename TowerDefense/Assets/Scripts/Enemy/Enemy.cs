@@ -1,46 +1,95 @@
-﻿using UnityEngine;
-
+﻿using System;
+using System.Collections;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 10F;
+    public float startSpeed = 10;
+    [SerializeField]
+    private float health = 100;
 
-    private Transform target;
-    private int wavePointIndex = 0;
+    [SerializeField]
+    private int monsterHeadBounty = 50;
 
-    void OnEnable()
+    [SerializeField]
+    private GameObject deathEffect;
+
+    private float startHealth;
+    [HideInInspector]
+    public float speed;
+
+
+    private float respawn = 5;
+    private bool spawn = true;
+    void Start()
     {
-        //this resets the Gameobject with the start Values
-        target = Waypoints.Points[0];
-        wavePointIndex = 0;
+        startHealth = health;
+        speed = startSpeed;
+        current = this;
+        spawn = false;
     }
 
-    void Update()
+    public void TakeDamage(float amount)
     {
-        //when you sub the target place - the current you get the dir where you need to go
-        Vector3 dir = target.position - transform.position;
-        //add some movement with Translate.
-        //normalize the dir before you * speed it or the end result can change and the Obejects move faster or slower
-        transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
-        //check if the distance is close so he can get the next wayPoint
-        if (Vector3.Distance(transform.position, target.position) <= 0.6F)
+        health -= amount;
+
+        if (health <= 0)
         {
-            GetNextWayPoint();
+            Die();
         }
-    }
-    void GetNextWayPoint()
-    {
-        //if wavePoiintIndex is greater then the waypoints.points.lenght than the gameobject arrieved at the end and can be set to false
-        if (wavePointIndex >= Waypoints.Points.Length - 1)
+        if(spawn)
         {
-            gameObject.SetActive(false);
-            //Destroy(gameObject); // do not use this!! we use a POOL
+            spawn = false;
+        }
+
+    }
+
+    public static Enemy current;
+
+    public bool GetRespawnTimer()
+    {
+        return spawn;
+    }
+
+    public void Slow(float pct)
+    {
+        //slows the enemy  speed * percentage 
+        speed = startSpeed * (1f - pct);
+    }
+
+    void Die()
+    {
+        GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(deathEffect.name);
+
+        if (gobj == null)
             return;
-        }
-        //if he isnt at the end increment the wavePointIndex
-        wavePointIndex++;
-        // and give him the next wavePoint
-        target = Waypoints.Points[wavePointIndex];
+
+        gobj.transform.position = transform.position;
+        gobj.transform.rotation = transform.rotation;
+        gobj.SetActive(true);
+
+
+        health = startHealth;
+
+     //   StartCoroutine(RespawnTimer());
+        Invoke("SetSpawn",respawn);
+
+        gameObject.SetActive(false);
+
+        PlayerStarts.money += monsterHeadBounty;
+    }
+
+    IEnumerator RespawnTimer()
+    {
+        SetSpawn();
+        yield return new WaitForSeconds(respawn);
+    }
+
+    private void SetSpawn()
+    {
+        spawn = true;
     }
 }

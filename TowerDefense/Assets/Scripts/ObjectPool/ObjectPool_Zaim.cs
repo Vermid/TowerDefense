@@ -6,7 +6,7 @@ public class ObjectPool_Zaim : MonoBehaviour
 {
     #region Inspector
     [SerializeField]
-    private int listSize = 10;
+    private int objectCounter = 10;
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
     #endregion
@@ -15,6 +15,7 @@ public class ObjectPool_Zaim : MonoBehaviour
 
     public static ObjectPool_Zaim current;
 
+    private GameObject gobjHolder;
 
     void Awake()
     {
@@ -25,6 +26,8 @@ public class ObjectPool_Zaim : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        gobjHolder = GameObject.FindGameObjectWithTag("Finish");
+
         InitializeDictionary();
     }
 
@@ -38,11 +41,12 @@ public class ObjectPool_Zaim : MonoBehaviour
             if (gobj != null)
             {
                 gameObjectsList = new List<GameObject>();
-                for (int i = 0; i < listSize; i++)
+                for (int i = 0; i < objectCounter; i++)
                 {
                     GameObject obj = (GameObject)Instantiate(gobj);
                     obj.SetActive(false);
                     gameObjectsList.Add(obj);
+                    obj.transform.parent = gobjHolder.transform;
                 }
                 ObjectPoolByName.Add(gobj.name, gameObjectsList);
             }
@@ -54,7 +58,7 @@ public class ObjectPool_Zaim : MonoBehaviour
     /// </summary>
     /// <param name="wantedGameObject"></param>
     /// <returns></returns>
-    public GameObject GetPoolObject(string wantedGameObject, bool canGrow)
+    public GameObject GetPoolObject(string wantedGameObject)
     {
         if (ObjectPoolByName.ContainsKey(wantedGameObject))
         {
@@ -67,18 +71,18 @@ public class ObjectPool_Zaim : MonoBehaviour
                     return value[i];
                 }
             }
-            //if can Grow is true The Lists will add more Gameobjects
-            if (canGrow)
-            {
-                //save the value from the dictionary by writing the wanted key
-                //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
-                GameObject obj = (GameObject)Instantiate(value[0]);
-                obj.SetActive(false);
-                //add the new map to the list from the value
-                // wyh did i add this?
-                value.Add(obj);
-                return obj;
-            }
+         
+            //If the there are no objetcs generate new objects and add them to the list 
+
+            //save the value from the dictionary by writing the wanted key
+            //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
+            GameObject obj = (GameObject)Instantiate(value[0]);
+            obj.SetActive(false);
+            //add the new map to the list from the value
+            // wyh did i add this?
+            value.Add(obj);
+            obj.transform.parent = gobjHolder.transform;
+            return obj;
         }
         return null;
     }

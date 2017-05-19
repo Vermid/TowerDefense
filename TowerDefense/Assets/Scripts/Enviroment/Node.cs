@@ -27,20 +27,26 @@ public class Node : MonoBehaviour
     //change all the mouse action for Touch actions (android)
     void OnMouseDown()
     {
-        if(!buildManager.CanBuild)
+        //if shop ui is over a node you cant build you will click on the shopUi turret 
+        if (EventSystem.current.IsPointerOverGameObject())
             return;
+
 
         if (turret != null)
         {
-            Debug.Log("We cant Build here");
+            buildManager.SelectNode(this);
             return;
         }
-        
+
+        if (!buildManager.CanBuild)
+            return;
+
         buildManager.BuildTurretOn(this);
-        }
+    }
 
     void OnMouseEnter()
-    {//hver ui element
+    {
+        //if shop ui is over a node you cant build you will click on the shopUi turret 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
