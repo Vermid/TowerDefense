@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
-    private TurrretBluePrint turretToBuild;
+    private TurretBlueprint turretToBuild;
     private Node selectedNode;
 
     [SerializeField]
@@ -33,36 +33,6 @@ public class BuildManager : MonoBehaviour
     }
 
 
-    public void BuildTurretOn(Node node)
-    {
-        //if the player has the money to buy the turret
-        if (PlayerStarts.money < turretToBuild.cost)
-        {
-            Debug.Log("Not enough money");
-            return;
-        }
-
-        PlayerStarts.money -= turretToBuild.cost;
-        //should we use the pool here? 
-        GameObject turret = (GameObject)Instantiate(turretToBuild.prefab, node.GetBuildPosition(), Quaternion.identity);
-
-        node.turret = turret;
-
-        Debug.Log("Turret build!! Money left: " + PlayerStarts.money);
-
-        GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(buildEffect.name);
-
-        if (gobj == null)
-            return;
-
-        gobj.transform.position = node.transform.position;
-        gobj.transform.rotation = node.transform.rotation;
-        gobj.SetActive(true);
-
-        turretToBuild = null;
-        selectedNode = null; //may delete this
-    }
-
     public void SelectNode(Node node)
     {
         if (selectedNode == node)
@@ -83,10 +53,15 @@ public class BuildManager : MonoBehaviour
         nodeUi.Hide();
     }
 
-    public void SelectTurretToBuild(TurrretBluePrint turret)
+    public void SelectTurretToBuild(TurretBlueprint turret)
     {
         //set the turret to buils
         turretToBuild = turret;
         DeselectNode();
+    }
+    public TurretBlueprint GetTurretToBuild()
+    {
+
+        return turretToBuild;
     }
 }
