@@ -4,10 +4,10 @@ public class Shop : MonoBehaviour
 {
     private BuildManager buildManager;
 
-    public TurrretBluePrint standradTurret;
-    public TurrretBluePrint missileTurret;
-    public TurrretBluePrint laserTurret;
-    public TurrretBluePrint mineFactory;
+    public TurretBlueprint standradTurret;
+    public TurretBlueprint missileTurret;
+    public TurretBlueprint laserTurret;
+    public TurretBlueprint mineFactory;
 
     void Start()
     {

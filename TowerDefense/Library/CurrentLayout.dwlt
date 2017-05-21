@@ -68,10 +68,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 913, y: 371}
-  m_MaxSize: {x: 22008, y: 14021}
+  m_MinSize: {x: 917, y: 371}
+  m_MaxSize: {x: 22012, y: 14021}
   vertical: 1
-  controlID: 2462
+  controlID: 52
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -90,8 +90,8 @@ MonoBehaviour:
     y: 0
     width: 399
     height: 719
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -167,7 +167,7 @@ MonoBehaviour:
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
-  m_LastLoadedLayoutName: Zaim_Laptop
+  m_LastLoadedLayoutName: 
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -209,10 +209,10 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 719
-  m_MinSize: {x: 913, y: 271}
-  m_MaxSize: {x: 22008, y: 10021}
+  m_MinSize: {x: 917, y: 271}
+  m_MaxSize: {x: 22012, y: 10021}
   vertical: 0
-  controlID: 2463
+  controlID: 53
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_MinSize: {x: 438, y: 271}
   m_MaxSize: {x: 14008, y: 10021}
   vertical: 0
-  controlID: 2400
+  controlID: 54
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -280,8 +280,8 @@ MonoBehaviour:
     y: 0
     width: 280
     height: 719
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 277, y: 71}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -419,14 +419,14 @@ MonoBehaviour:
     width: 1001
     height: 698
   m_SceneLighting: 1
-  lastFramingTime: 690.1677609242818
+  lastFramingTime: 723.2758529597821
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -29.351341, y: 9.001606, z: 10.8559265}
+    m_Target: {x: -60.60124, y: -5.884927, z: 32.640762}
     speed: 2
-    m_Value: {x: -29.351341, y: 9.001606, z: 10.8559265}
+    m_Value: {x: -60.60124, y: -5.884927, z: 32.640762}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -449,13 +449,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.077603124, y: 0.79689825, z: -0.10484071, w: -0.58986396}
+    m_Target: {x: -0.21708816, y: 0.038058393, z: -0.008470646, w: -0.97537297}
     speed: 2
-    m_Value: {x: -0.077603124, y: 0.79689825, z: -0.10484071, w: -0.58986396}
+    m_Value: {x: -0.21708818, y: 0.038058396, z: -0.008470647, w: -0.975373}
   m_Size:
-    m_Target: 151.38974
+    m_Target: 47.60936
     speed: 2
-    m_Value: 151.38974
+    m_Value: 47.60936
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -488,9 +488,9 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 255
+    x: 401
     y: 92
-    width: 1065
+    width: 1001
     height: 698
 --- !u!114 &17
 MonoBehaviour:
@@ -522,7 +522,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 9490fdffb272fffffc7fffffb6faffffbcfaffffdafbffff1efcffff00000000
+    m_ExpandedIDs: b4dbfeffbcdbfeffe2fbffff00000000d8270000b0290000862a00001c2b0000362b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -581,18 +581,19 @@ MonoBehaviour:
     m_ScenePaths: []
     m_ShowAllHits: 0
     m_SearchArea: 0
-    m_Folders: []
+    m_Folders:
+    - Assets/Prefabs/Tower
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\zaim.sarajlic\Desktop\Zaim\Private\Unity\_Projekte\GitHub\TowerDefense\TowerDefense
+  m_LastProjectPath: D:\GameDev\_Projekte\Github\TowerDefense\TowerDefense
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5e220000
     m_LastClickedID: 8798
-    m_ExpandedIDs: 000000003c250000742500007e250000a2250000c0250000ca2500003e260000422600005a2600007e2600008426000098260000a2260000a8260000ac260000c8260000d2260000ee26000038270000462700005c2700006a270000882700007e2e0000802e0000822e0000842e0000862e0000882e00008a2e00008c2e00008e2e0000902e0000
+    m_ExpandedIDs: 000000003c2500006a2500007e25000088250000d0250000dc2500000426000052260000562600006e26000094260000b6260000bc260000c0260000ce260000dc260000e6260000f4260000022700004c2700005a270000702700009c270000fa2e0000fc2e0000fe2e0000002f0000022f0000042f0000062f0000082f00000a2f00000c2f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -617,10 +618,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 213.75795}
+    scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003c250000742500007e250000a2250000b4250000c0250000ca250000f0250000382600003e26000042260000522600005a2600007e2600008426000098260000a2260000a8260000ac260000c8260000d2260000e0260000ee26000038270000462700005c2700006a270000882700007e2e0000802e0000822e0000842e0000862e0000882e00008a2e00008c2e00008e2e0000902e0000
+    m_ExpandedIDs: 000000003c2500006a2500007e25000088250000d0250000dc2500000426000052260000562600006e26000094260000b6260000bc260000c0260000ce260000dc260000e6260000f4260000022700004c2700005a270000702700009c270000fa2e0000fc2e0000fe2e0000002f0000022f0000042f0000062f0000082f00000a2f00000c2f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
