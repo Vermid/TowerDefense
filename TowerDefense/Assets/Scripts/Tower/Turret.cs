@@ -50,7 +50,7 @@ public class Turret : MonoBehaviour
     void Start()
     {
         //updates the target
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
 
     }
