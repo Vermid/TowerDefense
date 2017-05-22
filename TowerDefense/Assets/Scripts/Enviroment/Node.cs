@@ -112,6 +112,13 @@ public class Node : MonoBehaviour
 
     }
 
+    public void SellTurret()
+    {
+        PlayerStarts.money += turretBlueprint.GetSellAmount();
+
+        Destroy(turret);
+    }
+
     void OnMouseEnter()
     {
         //if shop ui is over a node you cant build you will click on the shopUi turret 
