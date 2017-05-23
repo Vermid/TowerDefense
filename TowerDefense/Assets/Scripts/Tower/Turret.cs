@@ -47,12 +47,13 @@ public class Turret : MonoBehaviour
     private Transform target;
     private Enemy targetEnemy;
 
+    private Graphix graphix;
     void Start()
     {
         //updates the target
         InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
-
+        graphix = GetComponentInChildren<Graphix>();
     }
 
     void UpdateTarget()
@@ -141,7 +142,7 @@ public class Turret : MonoBehaviour
                 Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
             //set the partToRotate.rotation  with the euler. Watch out Euler rotates  X Y and Z !! 
             partToRotate.rotation = Quaternion.Euler(0F, rotation.y, 0F);
-         //   SetAnim(rotation);
+            SetAnim(dir);
         }
         else
         {
@@ -153,53 +154,67 @@ public class Turret : MonoBehaviour
                 lineRenderer.SetPosition(1, transform.position);
                 return;
             }
-            if (bulletHolder.childCount > 0 )
+            if (bulletHolder.childCount > 0)
             {
                 for (int i = 0; i < bulletHolder.childCount; i++)
                 {
                     bulletHolder.GetChild(i).gameObject.SetActive(false);
                 }
             }
-            
-            
+
+
         }
     }
 
-    //void SetAnim(Vector3 dir)
-    //{
-    //    //Debug.Log(dir + "ParttoRtoate");
+    void SetAnim(Vector3 dir)
+    {
+        //Debug.Log(dir + "ParttoRtoate");
+        var armatureComponent = graphix.GetCurrentArmature();
+        var newdir = Vector3.Normalize(dir);
+        Debug.Log(newdir + "where am i");
 
-    //    if (dir.x >= 0 && dir.y == 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("right");
-    //    }
+        if (dir.x >= 0 && dir.y == 0.0f)
+        {
+            armatureComponent.animation.Play("right");
+        }
 
-    //    if (dir.x <= 0 && dir.y == 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("left");
-    //    }
+        if (dir.x <= 0 && dir.y == 0.0f)
+        {
+            armatureComponent.animation.Play("left");
+        }
 
-    //    if (dir.x == 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("front");
-    //    }
+        if (dir.x == 0.0f && dir.y >= 0.0f)
+        {
+            armatureComponent.animation.Play("front");
+        }
 
-    //    if (dir.x == 0.0f && dir.y <= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("back");
-    //    }
+        if (dir.x == 0.0f && dir.y <= 0.0f)
+        {
+            armatureComponent.animation.Play("back");
+        }
 
-    //    //cross
-    //    if (dir.x >= 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("right 45");
-    //    }
+        //cross
+        if (dir.x >= 0.0f && dir.y >= 0.0f)
+        {
+            armatureComponent.animation.Play("right 45_up");
+        }
 
-    //    if (dir.x <= 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("left 45");
-    //    }
-    //}
+        if (dir.x <= 0.0f && dir.y >= 0.0f)
+        {
+            armatureComponent.animation.Play("left 45_up");
+        }
+
+
+        if (dir.x >= 0.0f && dir.y <= 0.0f)
+        {
+            armatureComponent.animation.Play("right 45");
+        }
+
+        if (dir.x <= 0.0f && dir.y <= 0.0f)
+        {
+            armatureComponent.animation.Play("left 45");
+        }
+    }
 
 
     void Laser()

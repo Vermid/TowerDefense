@@ -12,19 +12,18 @@ public class Graphix : MonoBehaviour
     [SerializeField]
     private string armature;
 
+    private UnityArmatureComponent armatureComponent;
 
-    public static Graphix current;
-
-    void OnAwake()
+    public UnityArmatureComponent GetCurrentArmature()
     {
-        current = this;
+        return armatureComponent;
     }
     void Start()
     {
         UnityFactory.factory.LoadDragonBonesData(name + "/" + name + "_ske");
         UnityFactory.factory.LoadTextureAtlasData(name + "/" + name + "_tex");
 
-        UnityArmatureComponent armatureComponent = UnityFactory.factory.BuildArmatureComponent(armature, name, null, "", transform.gameObject);
+        armatureComponent = UnityFactory.factory.BuildArmatureComponent(armature, name, null, "", transform.gameObject);
         //        armatureComponent.animation.timeScale *= 0.5f;
 
         Debug.Log(armatureComponent);
