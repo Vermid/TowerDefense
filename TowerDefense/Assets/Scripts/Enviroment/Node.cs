@@ -115,8 +115,11 @@ public class Node : MonoBehaviour
     public void SellTurret()
     {
         PlayerStarts.money += turretBlueprint.GetSellAmount();
+        GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
+        Destroy(effect,5f);
         Destroy(turret);
-        buildManager.DeselectNode();
+        turretBlueprint = null;
+       //buildManager.DeselectNode();
     }
 
     void OnMouseEnter()
