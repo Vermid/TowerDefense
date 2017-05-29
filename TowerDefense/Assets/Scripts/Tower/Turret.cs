@@ -48,12 +48,14 @@ public class Turret : MonoBehaviour
     private Enemy targetEnemy;
 
     private Graphix graphix;
+    private UnityArmatureComponent armatureComponent;
     void Start()
     {
         //updates the target
         InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
         graphix = GetComponentInChildren<Graphix>();
+        armatureComponent = graphix.GetCurrentArmature();
     }
 
     void UpdateTarget()
@@ -93,6 +95,7 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
+
         if (target == null)
         {
             if (useLaser)
@@ -105,6 +108,8 @@ public class Turret : MonoBehaviour
                     impactlight.enabled = false;
                 }
             }
+            armatureComponent.animation.Play("Still");
+
             return;
         }
 
@@ -168,52 +173,74 @@ public class Turret : MonoBehaviour
 
     void SetAnim(Vector3 dir)
     {
+        /*
         //Debug.Log(dir + "ParttoRtoate");
-        var armatureComponent = graphix.GetCurrentArmature();
         var newdir = Vector3.Normalize(dir);
-        Debug.Log(newdir + "where am i");
+        //Debug.Log(newdir + "where am i");
 
         if (dir.x >= 0 && dir.y == 0.0f)
         {
-            armatureComponent.animation.Play("right");
+            //armatureComponent.animation.Play("right");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Right, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         if (dir.x <= 0 && dir.y == 0.0f)
         {
-            armatureComponent.animation.Play("left");
+            //armatureComponent.animation.Play("left");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Left, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         if (dir.x == 0.0f && dir.y >= 0.0f)
         {
-            armatureComponent.animation.Play("front");
+            //armatureComponent.animation.Play("front");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Down, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         if (dir.x == 0.0f && dir.y <= 0.0f)
         {
-            armatureComponent.animation.Play("back");
+            //armatureComponent.animation.Play("back");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Up, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         //cross
         if (dir.x >= 0.0f && dir.y >= 0.0f)
         {
-            armatureComponent.animation.Play("right 45_up");
+            //armatureComponent.animation.Play("right 45_up");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.front_45_right, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         if (dir.x <= 0.0f && dir.y >= 0.0f)
         {
-            armatureComponent.animation.Play("left 45_up");
+            //  armatureComponent.animation.Play("left 45_up");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.back_45_left, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
 
         if (dir.x >= 0.0f && dir.y <= 0.0f)
         {
-            armatureComponent.animation.Play("right 45");
+            //  armatureComponent.animation.Play("right 45");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.front_45_right, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
 
         if (dir.x <= 0.0f && dir.y <= 0.0f)
         {
-            armatureComponent.animation.Play("left 45");
+            //    armatureComponent.animation.Play("left 45");
+            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.back_45_righ, graphix.GetArmaureName(), null, "", transform.gameObject);
+
         }
+
+        Debug.Log(armatureComponent);
+
+        //How long is the Animation?
+        armatureComponent.animation.Play("Shoot");
+        */
     }
 
 

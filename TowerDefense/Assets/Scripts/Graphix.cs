@@ -18,6 +18,12 @@ public class Graphix : MonoBehaviour
     {
         return armatureComponent;
     }
+
+    public string GetArmaureName()
+    {
+        return name;
+    }
+
     void Start()
     {
         UnityFactory.factory.LoadDragonBonesData(name + "/" + name + "_ske");

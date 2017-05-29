@@ -13,6 +13,13 @@ public class ConstNames : MonoBehaviour
     public const string Finish = "Finish";
 
 
+    public const string Left = "left";
+    public const string Right = "right";
+    public const string Up = "up";
+    public const string Down = "front";
+    public const string front_45_right = "front_45_right";
+    public const string front_45_left = "front_45_left";
+    public const string back_45_left = "back_45_left";
+    public const string back_45_righ = "back_45_righ";
 
-    
 }
