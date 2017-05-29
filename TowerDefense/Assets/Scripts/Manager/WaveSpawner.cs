@@ -85,7 +85,6 @@ public class WaveSpawner : MonoBehaviour
         if (obj == null)
             return false;
         var spawn = obj.GetComponent<Enemy>().GetRespawnTimer();
-        Debug.Log(spawn);
         if (!spawn)
             return false;
 
