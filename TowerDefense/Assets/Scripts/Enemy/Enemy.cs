@@ -6,22 +6,26 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
+    #region Inspector
+
+    [Header("Attributes")]
     [SerializeField]
     public float startSpeed = 10;
+
     [SerializeField]
     private float health = 100;
 
     [SerializeField]
     private int monsterHeadBounty = 50;
 
-    [SerializeField]
-    private GameObject deathEffect;
-
-    private float startHealth;
     [HideInInspector]
     public float speed;
 
+    [SerializeField]
+    private GameObject deathEffect;
+    #endregion
 
+    private float startHealth;
     private float respawn = 5;
     private bool spawn = true;
     void Start()
@@ -40,7 +44,7 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
-        if(spawn)
+        if (spawn)
         {
             spawn = false;
         }
@@ -74,8 +78,8 @@ public class Enemy : MonoBehaviour
 
         health = startHealth;
 
-     //   StartCoroutine(RespawnTimer());
-        Invoke("SetSpawn",respawn);
+        //   StartCoroutine(RespawnTimer());
+        Invoke("SetSpawn", respawn);
 
         gameObject.SetActive(false);
 

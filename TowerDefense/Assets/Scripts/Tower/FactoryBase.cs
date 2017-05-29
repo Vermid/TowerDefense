@@ -7,25 +7,26 @@ using UnityEngine.UI;
 public class FactoryBase : MonoBehaviour
 {
     #region Inspector
-    [Header("Attributes")]
     [SerializeField]
-    private GameObject mines;
+    private GameObject mine;
+    [Header("Attributes")]
     [SerializeField]
     private float timeBetweenSpawn = 5F;
     [SerializeField]
     private int maxMines = 5;
     [SerializeField]
     private int mineRadius = 5;
-    [Header("ObjectPool")]
     #endregion
+
     private float countDown = 2F;
-    private Transform target;
+    private Transform children;
     private Vector3 offsett;
     private float radius;
+    private Transform[] targets;
 
     void Start()
     {
-        target = transform.FindChild(ConstNames.SpawnPoint).transform;
+        children = transform.FindChild(ConstNames.SpawnPoint).transform;
 
         radius = GetComponentInChildren<SphereCollider>().radius = mineRadius;
         radius /= 2;
@@ -35,9 +36,9 @@ public class FactoryBase : MonoBehaviour
     void Update()
     {
         //spawn enemys only if the coundown reaches 0
-        if (countDown <= 0F && target.childCount < maxMines)
+        if (countDown <= 0F && children.childCount <= maxMines)
         {
-            StartCoroutine(SpawnWave());
+            StartCoroutine(Spawn());
             //set the coundown back to any time you want  in this chase tmeBetweenWaves
             countDown = timeBetweenSpawn;
         }
@@ -45,15 +46,17 @@ public class FactoryBase : MonoBehaviour
         countDown -= Time.deltaTime; //time past since last frames
     }
 
-    IEnumerator SpawnWave()
+    IEnumerator Spawn()
     {
         //call the funktion and pas the wanted enemysName into
-        SpawnEnemy(mines.name);
+        SpawnMine(mine.name);
         //wait .5 seconds for the next Enemy
         yield return new WaitForSeconds(.5F);
     }
 
-    public Transform[] targets;
+    /// <summary>
+    /// This will set the mine around the next Waypoint
+    /// </summary>
     void SpawnPoint()
     {
         targets = Waypoints.Points;
@@ -65,17 +68,16 @@ public class FactoryBase : MonoBehaviour
             if (Vector3.Distance(waypoint.position, transform.position) <= distance)
             {
                 distance = Vector3.Distance(waypoint.position, transform.position);
-                target.transform.position = waypoint.position;
+                children.transform.position = waypoint.position;
             }
         }
     }
 
     /// <summary>
-    /// Wants the Soldier Name.
-    /// this gets than a gameobject and move the position and rotation and set it than to true
+    /// Spawns the wanted Object 
     /// </summary>
     /// <param name="name"></param>
-    void SpawnEnemy(string name)
+    void SpawnMine(string name)
     {
         GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name);
         if (obj == null)
@@ -86,18 +88,18 @@ public class FactoryBase : MonoBehaviour
 
         offsett = new Vector3(offsetX, 0, offsetZ);
 
-        obj.transform.position = target.transform.position + offsett;
-        obj.transform.rotation = target.transform.rotation;
+        obj.transform.position = children.transform.position + offsett;
+        obj.transform.rotation = children.transform.rotation;
         obj.SetActive(true);
 
-        obj.transform.parent = target;
+        obj.transform.parent = children;
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if (target != null)
-            Gizmos.DrawWireSphere(target.transform.position, mineRadius * 2);
+        if (children != null)
+            Gizmos.DrawWireSphere(children.transform.position, mineRadius * 2);
     }
 
 }

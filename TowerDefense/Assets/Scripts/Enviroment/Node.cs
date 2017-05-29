@@ -4,21 +4,24 @@ using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
+    #region Inspector
+    [HideInInspector]
+    public bool isUpgraded = false;
+
     [SerializeField]
     private Color hoverColor;
+
     [SerializeField]
     private Color notEnoughMoneyColor;
 
     [SerializeField]
     private Vector3 positionOffset;
-   // [Header("This is needed for the Player Turret")]
-   [HideInInspector]
+    // [Header("This is needed for the Player Turret")]
+    [HideInInspector]
     public GameObject turret;
     [HideInInspector]
     public TurretBlueprint turretBlueprint;
-    [HideInInspector]
-    public bool  isUpgraded = false;
-
+    #endregion
     private BuildManager buildManager;
 
     private Renderer rend;

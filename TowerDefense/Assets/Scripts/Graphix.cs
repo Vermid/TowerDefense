@@ -32,8 +32,7 @@ public class Graphix : MonoBehaviour
         armatureComponent = UnityFactory.factory.BuildArmatureComponent(armature, name, null, "", transform.gameObject);
         //        armatureComponent.animation.timeScale *= 0.5f;
 
-        Debug.Log(armatureComponent);
-
         armatureComponent.animation.Play(status);
+
     }
 }

@@ -7,17 +7,18 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]
-    private float speed = 70f;
-
-    [SerializeField]
-    private float splashRadius = 0;
-
-    [SerializeField]
-    private int damage = 50;
-
+    #region Inspector
     [SerializeField]
     private GameObject impactEffect = null;
+
+    [Header("Attributes")]
+    [SerializeField]
+    private float speed = 70f;
+    [SerializeField]
+    private float splashRadius = 0;
+    [SerializeField]
+    private int damage = 50;
+    #endregion
 
     private Transform target;
 

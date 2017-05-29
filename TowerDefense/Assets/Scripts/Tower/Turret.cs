@@ -34,7 +34,7 @@ public class Turret : MonoBehaviour
     [SerializeField]
     private Light impactlight;
 
-    [Header("Unity Setup Fileds")]
+    [Header("Unity Setup Fields")]
     [SerializeField]
     private Transform partToRotate;
     [SerializeField]
@@ -47,15 +47,11 @@ public class Turret : MonoBehaviour
     private Transform target;
     private Enemy targetEnemy;
 
-    private Graphix graphix;
-    private UnityArmatureComponent armatureComponent;
     void Start()
     {
         //updates the target
         InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
-        graphix = GetComponentInChildren<Graphix>();
-        armatureComponent = graphix.GetCurrentArmature();
     }
 
     void UpdateTarget()
@@ -108,7 +104,7 @@ public class Turret : MonoBehaviour
                     impactlight.enabled = false;
                 }
             }
-            armatureComponent.animation.Play("Still");
+            //armatureComponent.animation.Play("Still");
 
             return;
         }
@@ -147,7 +143,6 @@ public class Turret : MonoBehaviour
                 Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
             //set the partToRotate.rotation  with the euler. Watch out Euler rotates  X Y and Z !! 
             partToRotate.rotation = Quaternion.Euler(0F, rotation.y, 0F);
-            SetAnim(dir);
         }
         else
         {
@@ -166,83 +161,8 @@ public class Turret : MonoBehaviour
                     bulletHolder.GetChild(i).gameObject.SetActive(false);
                 }
             }
-
-
         }
     }
-
-    void SetAnim(Vector3 dir)
-    {
-        /*
-        //Debug.Log(dir + "ParttoRtoate");
-        var newdir = Vector3.Normalize(dir);
-        //Debug.Log(newdir + "where am i");
-
-        if (dir.x >= 0 && dir.y == 0.0f)
-        {
-            //armatureComponent.animation.Play("right");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Right, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        if (dir.x <= 0 && dir.y == 0.0f)
-        {
-            //armatureComponent.animation.Play("left");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Left, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        if (dir.x == 0.0f && dir.y >= 0.0f)
-        {
-            //armatureComponent.animation.Play("front");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Down, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        if (dir.x == 0.0f && dir.y <= 0.0f)
-        {
-            //armatureComponent.animation.Play("back");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.Up, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        //cross
-        if (dir.x >= 0.0f && dir.y >= 0.0f)
-        {
-            //armatureComponent.animation.Play("right 45_up");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.front_45_right, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        if (dir.x <= 0.0f && dir.y >= 0.0f)
-        {
-            //  armatureComponent.animation.Play("left 45_up");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.back_45_left, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-
-        if (dir.x >= 0.0f && dir.y <= 0.0f)
-        {
-            //  armatureComponent.animation.Play("right 45");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.front_45_right, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        if (dir.x <= 0.0f && dir.y <= 0.0f)
-        {
-            //    armatureComponent.animation.Play("left 45");
-            armatureComponent = UnityFactory.factory.BuildArmatureComponent(ConstNames.back_45_righ, graphix.GetArmaureName(), null, "", transform.gameObject);
-
-        }
-
-        Debug.Log(armatureComponent);
-
-        //How long is the Animation?
-        armatureComponent.animation.Play("Shoot");
-        */
-    }
-
 
     void Laser()
     {
