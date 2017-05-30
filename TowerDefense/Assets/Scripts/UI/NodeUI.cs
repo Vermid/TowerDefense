@@ -3,12 +3,14 @@ using UnityEngine.UI;
 
 public class NodeUI : MonoBehaviour
 {
+    #region Inspector
     public GameObject ui;
-    private Node target;
     public Text upgradeCost;
     public Button upgradeButton;
-
     public Text sellAmount;
+    #endregion
+
+    private Node target;
 
     public void SetTarget(Node _target)
     {

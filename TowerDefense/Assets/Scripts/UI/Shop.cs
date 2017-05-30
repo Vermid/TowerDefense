@@ -2,13 +2,14 @@
 
 public class Shop : MonoBehaviour
 {
-    private BuildManager buildManager;
-
+    #region Inspector
     public TurretBlueprint standradTurret;
     public TurretBlueprint missileTurret;
     public TurretBlueprint laserTurret;
     public TurretBlueprint mineFactory;
+    #endregion
 
+    private BuildManager buildManager;
     void Start()
     {
         buildManager = BuildManager.instance;

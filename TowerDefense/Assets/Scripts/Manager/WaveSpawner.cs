@@ -15,8 +15,10 @@ public class WaveSpawner : MonoBehaviour
     private float timeBetweenWaves = 5F;
     [SerializeField]
     private int objectCounter = 10;
+    [Tooltip("List of all Enemys")]
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
+    [Tooltip("List of how much Enemys will spawn in each Wave")]
     [SerializeField]
     private List<int> enemyCounter = new List<int>();
 

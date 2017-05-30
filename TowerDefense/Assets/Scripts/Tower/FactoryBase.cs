@@ -9,11 +9,14 @@ public class FactoryBase : MonoBehaviour
     #region Inspector
     [SerializeField]
     private GameObject mine;
+
     [Header("Attributes")]
     [SerializeField]
     private float timeBetweenSpawn = 5F;
+
     [SerializeField]
     private int maxMines = 5;
+
     [SerializeField]
     private int mineRadius = 5;
     #endregion

@@ -5,8 +5,10 @@ using UnityEngine;
 public class ObjectPool_Zaim : MonoBehaviour
 {
     #region Inspector
+    [Tooltip("How much Objects to hold at the Beginning")]
     [SerializeField]
     private int objectCounter = 10;
+    [Tooltip("List of All Gamobjects")]
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
     #endregion

@@ -17,28 +17,37 @@ public class Turret : MonoBehaviour
     [Header("Bullets(Default)")]
     [SerializeField]
     private float fireRate = 1f;
+
     [SerializeField]
     private GameObject gobjName;
 
     [Header("Laser")]
     [SerializeField]
     private bool useLaser = false;
+
     [SerializeField]
     private float slowAmount = .5f;
+
     [SerializeField]
     private int damageOverTime = 30;
+
     [SerializeField]
     private LineRenderer lineRenderer;
+
     [SerializeField]
     private ParticleSystem impactEffect;
+
     [SerializeField]
     private Light impactlight;
 
     [Header("Unity Setup Fields")]
+
     [SerializeField]
     private Transform partToRotate;
+
     [SerializeField]
     private Transform firePoint;
+
     [SerializeField]
     private float turnSpeed = 10f;
     #endregion

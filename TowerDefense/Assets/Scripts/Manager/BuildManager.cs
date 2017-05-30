@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
-    private TurretBlueprint turretToBuild;
-    private Node selectedNode;
-
+    #region Inspector
     [SerializeField]
     public GameObject buildEffect;
 
     public static BuildManager instance;
     public NodeUI nodeUi;
     public GameObject sellEffect;
+    #endregion
+    private TurretBlueprint turretToBuild;
+    private Node selectedNode;
+
+
     void Awake()
     {
         if (instance != null)
