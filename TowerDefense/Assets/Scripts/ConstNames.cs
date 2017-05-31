@@ -12,6 +12,8 @@ public class ConstNames : MonoBehaviour
     public const string SpawnPoint = "SpawnPoint";
     public const string Finish = "Finish";
 
+    public const string ObjectPool = "ObjectPool";
+
     #endregion
 
     #region Function

@@ -26,12 +26,14 @@ public class Node : MonoBehaviour
 
     private Renderer rend;
     private Color startColor;
-
+    private GameObject objectHolder;
     void Start()
     {
         buildManager = BuildManager.instance;
         rend = GetComponent<Renderer>();
         startColor = rend.material.color;
+        objectHolder =  GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
+
     }
     //change all the mouse action for Touch actions (android)
     void OnMouseDown()
@@ -91,6 +93,17 @@ public class Node : MonoBehaviour
             Debug.Log("Not enough money");
             return;
         }
+
+        if (turret.transform.FindChild(ConstNames.SpawnPoint))
+        {
+            var children = turret.transform.FindChild(ConstNames.SpawnPoint);
+            for (int i = 0; i < children.childCount; i++)
+            {
+                children.GetChild(i).gameObject.SetActive(false);
+                children.GetChild(i).SetParent(objectHolder.transform);
+            }
+        }
+
         Destroy(turret);
         //destroy or move old turret back
 
@@ -119,10 +132,10 @@ public class Node : MonoBehaviour
     {
         PlayerStarts.money += turretBlueprint.GetSellAmount();
         GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
-        Destroy(effect,5f);
+        Destroy(effect, 5f);
         Destroy(turret);
         turretBlueprint = null;
-       //buildManager.DeselectNode();
+        //buildManager.DeselectNode();
     }
 
     void OnMouseEnter()

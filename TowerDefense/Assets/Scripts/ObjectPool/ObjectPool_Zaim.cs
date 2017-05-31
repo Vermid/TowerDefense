@@ -28,7 +28,7 @@ public class ObjectPool_Zaim : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gobjHolder = GameObject.FindGameObjectWithTag("Finish");
+        gobjHolder = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
 
         InitializeDictionary();
     }

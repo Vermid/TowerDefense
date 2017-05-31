@@ -17,7 +17,7 @@ public class Mine : MonoBehaviour
 
     void Start()
     {
-        parent = GameObject.FindGameObjectWithTag(ConstNames.Finish);
+        parent = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
     }
 
     void OnTriggerEnter(Collider other)
