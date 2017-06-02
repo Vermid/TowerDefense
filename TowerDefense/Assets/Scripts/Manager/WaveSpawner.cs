@@ -23,6 +23,7 @@ public class WaveSpawner : MonoBehaviour
     private List<int> enemyCounter = new List<int>();
 
     #endregion
+    private bool nextWave = false;
 
     private float countDown = 2F;
 
@@ -31,22 +32,38 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            nextWave = true;
+        }
+        Debug.Log("NextWave Middle " + nextWave);
+
         //spawn enemys only if the coundown reaches 0
-        if (countDown <= 0F)
+        if (nextWave)
         {
             StartCoroutine(SpawnWave());
-            //set the coundown back to any time you want  in this chase tmeBetweenWaves
-            countDown = timeBetweenWaves;
+            nextWave = false;
         }
-        //count in seconds?
-        countDown -= Time.deltaTime; //time past since last frames
 
-        countDown = Mathf.Clamp(countDown, 0f, Mathf.Infinity);
+
+        #region EndlessWave
+        //if (countDown <= 0F)
+        //if (nextWave)
+        //{
+        //    StartCoroutine(SpawnWave());
+        //    //set the coundown back to any time you want  in this chase tmeBetweenWaves
+        //    countDown = timeBetweenWaves;
+        //}
+        //count in seconds?
+        //countDown -= Time.deltaTime; //time past since last frames
+
+        //countDown = Mathf.Clamp(countDown, 0f, Mathf.Infinity);
 
         //show the countdown into the text Object
         // WaveCoundownText.text = Mathf.Round(countDown).ToString();
         //string format to show a better contdown 
-        WaveCoundownText.text = string.Format("{0:00.00}", countDown);
+        // WaveCoundownText.text = string.Format("{0:00.00}", countDown);
+        #endregion
     }
 
 
@@ -66,8 +83,8 @@ public class WaveSpawner : MonoBehaviour
             {
                 for (int i = 0; i < enemyCounter.Count;)
                 {
-                    if(SpawnEnemy(gobj.name))
-                        i++; 
+                    if (SpawnEnemy(gobj.name))
+                        i++;
                     yield return new WaitForSeconds(.1F);
                 }
             }
