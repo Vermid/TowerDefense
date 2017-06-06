@@ -11,7 +11,7 @@ public class ConstNames : MonoBehaviour
     public const string TankMonster = "Monster2/Monster2_ske";
     public const string SpawnPoint = "SpawnPoint";
     public const string Finish = "Finish";
-
+    public const string MainMenu = "MainMenu";
     public const string ObjectPool = "ObjectPool";
 
     #endregion

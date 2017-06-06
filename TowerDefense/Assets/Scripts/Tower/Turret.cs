@@ -40,6 +40,9 @@ public class Turret : MonoBehaviour
     [SerializeField]
     private Light impactlight;
 
+    [SerializeField]
+    private ParticleSystem laserEffect;
+
     [Header("Unity Setup Fields")]
 
     [SerializeField]
@@ -113,8 +116,6 @@ public class Turret : MonoBehaviour
                     impactlight.enabled = false;
                 }
             }
-            //armatureComponent.animation.Play("Still");
-
             return;
         }
 
@@ -223,5 +224,19 @@ public class Turret : MonoBehaviour
         Gizmos.color = Color.red;
         //draw a DrawWireSphere  
         Gizmos.DrawWireSphere(transform.position, range);
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        Debug.Log("LASAEREFFECT");
+     //   Destroy(laserEffect);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("LASAEREFFECT");
+        Debug.Log(other.gameObject.name);
+
+        //   Destroy(laserEffect);
     }
 }
