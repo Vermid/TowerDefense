@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UI;
+
 using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
@@ -23,6 +25,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private GameObject deathEffect;
+
+    [SerializeField]
+    private Image healthBar;
     #endregion
 
     private float startHealth;
@@ -40,6 +45,7 @@ public class Enemy : MonoBehaviour
     {
         health -= amount;
 
+        healthBar.fillAmount = health/startHealth; // change this to interpolation
         if (health <= 0)
         {
             Die();
@@ -96,4 +102,25 @@ public class Enemy : MonoBehaviour
     {
         spawn = true;
     }
+
+    //void OnParticleCollision(GameObject other)
+    //{
+    //    Debug.Log("OnParticleCollision");
+    //    //   Destroy(laserEffect);
+    //}
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnTriggerEnter");
+        Debug.Log(other.gameObject.name);
+        //        Destroy(other);
+    }
+
+    //void OnCollisionEnter(Collision other)
+    //{
+    //    Debug.Log("OnCollisionEnter");
+    //    Debug.Log(other.gameObject.name);
+
+    //}
+
 }

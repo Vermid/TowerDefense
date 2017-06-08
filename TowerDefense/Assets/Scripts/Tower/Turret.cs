@@ -55,6 +55,8 @@ public class Turret : MonoBehaviour
     private float turnSpeed = 10f;
     #endregion
 
+    public GameObject LaserGameObject;
+
     private float fireCoundown = 0f;
     private Transform target;
     private Enemy targetEnemy;
@@ -101,9 +103,9 @@ public class Turret : MonoBehaviour
         }
     }
 
+
     void Update()
     {
-
         if (target == null)
         {
             if (useLaser)
@@ -114,6 +116,7 @@ public class Turret : MonoBehaviour
                     //use play for particle effect or they will just despawn 
                     impactEffect.Stop();
                     impactlight.enabled = false;
+                    LaserGameObject.SetActive(false);
                 }
             }
             return;
@@ -153,6 +156,11 @@ public class Turret : MonoBehaviour
                 Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
             //set the partToRotate.rotation  with the euler. Watch out Euler rotates  X Y and Z !! 
             partToRotate.rotation = Quaternion.Euler(0F, rotation.y, 0F);
+
+            if (useLaser)
+            {
+                LaserGameObject.transform.rotation = Quaternion.LookRotation(dir);
+            }
         }
         else
         {
@@ -176,6 +184,8 @@ public class Turret : MonoBehaviour
 
     void Laser()
     {
+        LaserGameObject.SetActive(true);
+
         targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
         targetEnemy.Slow(slowAmount);
 
@@ -224,19 +234,5 @@ public class Turret : MonoBehaviour
         Gizmos.color = Color.red;
         //draw a DrawWireSphere  
         Gizmos.DrawWireSphere(transform.position, range);
-    }
-
-    void OnParticleCollision(GameObject other)
-    {
-        Debug.Log("LASAEREFFECT");
-     //   Destroy(laserEffect);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("LASAEREFFECT");
-        Debug.Log(other.gameObject.name);
-
-        //   Destroy(laserEffect);
     }
 }

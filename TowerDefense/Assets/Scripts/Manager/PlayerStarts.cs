@@ -8,7 +8,7 @@ public class PlayerStarts : MonoBehaviour
     [SerializeField]
     private int startMoney = 1000;
     [SerializeField]
-    private int startLives = 20;
+    private int startLives = 2;
 
     public static int lives;
     public static int money;
