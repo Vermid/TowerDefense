@@ -69,7 +69,11 @@ public class Turret : MonoBehaviour
 
         if (!useLaser)
         {
+<<<<<<< HEAD
             var laserHolder = partToRotate.gameObject.transform.FindChild("LaserObjectHolder");
+=======
+            var laserHolder = partToRotate.gameObject.transform.Find("LaserObjectHolder");
+>>>>>>> Home
             laserHolder.gameObject.SetActive(false);
         }
         else
@@ -180,7 +184,7 @@ public class Turret : MonoBehaviour
         else
         {
             //this looks like the right way to fix the bug 
-            var bulletHolder = gameObject.transform.FindChild("BulletHolder");
+            var bulletHolder = gameObject.transform.Find("BulletHolder");
             if (useLaser)
             {
                 lineRenderer.SetPosition(0, transform.position);
@@ -240,7 +244,7 @@ public class Turret : MonoBehaviour
         bulletObj.transform.rotation = firePoint.rotation;
 
         //var bulletHolder = gameObject.transform.parent.FindChild("BulletHolder");
-        var bulletHolder = gameObject.transform.FindChild("BulletHolder");
+        var bulletHolder = gameObject.transform.Find("BulletHolder");
 
         bulletObj.transform.parent = bulletHolder.transform;
         bulletObj.SetActive(true);
