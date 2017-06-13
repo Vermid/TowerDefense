@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
@@ -21,6 +19,13 @@ public class WaveSpawner : MonoBehaviour
     [Tooltip("List of how much Enemys will spawn in each Wave")]
     [SerializeField]
     private List<int> enemyCounter = new List<int>();
+
+    [SerializeField]
+    public struct Elements
+    {
+        public GameObject g;
+        public int inte;
+    }
 
     #endregion
     private bool nextWave = false;
@@ -69,21 +74,16 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator SpawnWave()
     {
-
         //TODO: this works for now change it later 
         //loop the Inspector list
-        foreach (GameObject gobj in listOfGameObjects)
+        //foreach (GameObject gobj in listOfGameObjects)
+        for (int x = 0; x < listOfGameObjects.Count; x++)
         {
-            if (waveIndex != 0)
+            if (listOfGameObjects[x] != null)
             {
-                objectCounter += 1;
-            }
-            //check if the list is hight than the gameobjects set
-            if (gobj != null)
-            {
-                for (int i = 0; i < enemyCounter.Count;)
+                for (int i = 0; i < enemyCounter[x];)
                 {
-                    if (SpawnEnemy(gobj.name))
+                    if (SpawnEnemy(listOfGameObjects[x].name))
                         i++;
                     yield return new WaitForSeconds(.1F);
                 }

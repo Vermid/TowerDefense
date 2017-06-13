@@ -66,7 +66,25 @@ public class Turret : MonoBehaviour
         //updates the target
         InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
+
+        if (!useLaser)
+        {
+            var laserHolder = partToRotate.gameObject.transform.FindChild("LaserObjectHolder");
+            laserHolder.gameObject.SetActive(false);
+        }
+        else
+        {
+            var enemyList = GameObject.FindGameObjectsWithTag("Enemy");
+            ParticleSystem ptsystem = LaserGameObject.GetComponent<ParticleSystem>();
+
+            for (int i = 0; i < enemyList.Length; i++)
+            {
+                BoxCollider targetCollider = enemyList[i].GetComponent<BoxCollider>();
+                ptsystem.trigger.SetCollider(i, targetCollider);
+            }
+        }
     }
+
 
     void UpdateTarget()
     {
@@ -103,10 +121,9 @@ public class Turret : MonoBehaviour
         }
     }
 
-
     void Update()
     {
-        if (target == null)
+        if (target == null || targetEnemy != null && targetEnemy.GetHealth() <= 0)
         {
             if (useLaser)
             {
@@ -121,23 +138,25 @@ public class Turret : MonoBehaviour
             }
             return;
         }
-
-        LockOnTarget();
-
-        if (useLaser)
+        if (targetEnemy != null && targetEnemy.GetHealth() >= 0)
         {
-            Laser();
-        }
-        else
-        {
-            if (fireCoundown <= 0f)
+            LockOnTarget();
+
+            if (useLaser)
             {
-                Shoot();
-                //why 1/1 ? this dont make sense try somewthing out with the variables!!
-                fireCoundown = 1f / fireRate;
+                Laser();
             }
-            //subs a seconds(framerate) away frm the firecoundown
-            fireCoundown -= Time.deltaTime;
+            else
+            {
+                if (fireCoundown <= 0f)
+                {
+                    Shoot();
+                    //why 1/1 ? this dont make sense try somewthing out with the variables!!
+                    fireCoundown = 1f / fireRate;
+                }
+                //subs a seconds(framerate) away frm the firecoundown
+                fireCoundown -= Time.deltaTime;
+            }
         }
     }
 
@@ -157,10 +176,6 @@ public class Turret : MonoBehaviour
             //set the partToRotate.rotation  with the euler. Watch out Euler rotates  X Y and Z !! 
             partToRotate.rotation = Quaternion.Euler(0F, rotation.y, 0F);
 
-            if (useLaser)
-            {
-                LaserGameObject.transform.rotation = Quaternion.LookRotation(dir);
-            }
         }
         else
         {
@@ -182,8 +197,14 @@ public class Turret : MonoBehaviour
         }
     }
 
+    private int particleSystemCounter = 0;
     void Laser()
     {
+        ParticleSystem ptsystem = LaserGameObject.GetComponent<ParticleSystem>();
+
+        BoxCollider targetCollider = target.GetComponent<BoxCollider>();
+        ptsystem.trigger.SetCollider(particleSystemCounter++, targetCollider);
+
         LaserGameObject.SetActive(true);
 
         targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
@@ -201,7 +222,9 @@ public class Turret : MonoBehaviour
 
         Vector3 dir = firePoint.position - target.position;
 
-        impactEffect.transform.position = target.position;//+ dir.normalized;
+        var offsett = new Vector3(0, 2f, 0);
+
+        impactEffect.transform.position = target.position + offsett; //+ dir.normalized;
 
         impactEffect.transform.rotation = Quaternion.LookRotation(dir);
     }

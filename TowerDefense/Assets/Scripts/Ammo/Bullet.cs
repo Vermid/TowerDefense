@@ -1,8 +1,8 @@
 ﻿#region Using/Import
 
 using System.Collections;
+using Assets.Scripts;
 using UnityEngine;
-
 #endregion
 
 public class Bullet : MonoBehaviour
@@ -19,6 +19,8 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private int damage = 50;
     #endregion
+
+    [SerializeField] private Enums.WeaponType weaponType;
 
     private Transform target;
 

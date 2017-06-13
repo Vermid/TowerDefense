@@ -32,7 +32,7 @@ public class Node : MonoBehaviour
         buildManager = BuildManager.instance;
         rend = GetComponent<Renderer>();
         startColor = rend.material.color;
-        objectHolder =  GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
+        objectHolder = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
 
     }
     //change all the mouse action for Touch actions (android)

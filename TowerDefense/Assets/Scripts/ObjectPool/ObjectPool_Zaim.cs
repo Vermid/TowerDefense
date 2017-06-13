@@ -19,6 +19,7 @@ public class ObjectPool_Zaim : MonoBehaviour
 
     private GameObject gobjHolder;
 
+
     void Awake()
     {
         // get acces onto this script
@@ -73,19 +74,27 @@ public class ObjectPool_Zaim : MonoBehaviour
                     return value[i];
                 }
             }
-         
+
             //If the there are no objetcs generate new objects and add them to the list 
 
             //save the value from the dictionary by writing the wanted key
             //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
-            GameObject obj = (GameObject)Instantiate(value[0]);
-            obj.SetActive(false);
-            //add the new map to the list from the value
-            // wyh did i add this?
-            value.Add(obj);
-            obj.transform.parent = gobjHolder.transform;
-            return obj;
-        }
+            foreach (GameObject gobList in listOfGameObjects)
+            {
+                if (gobList == null)
+                    return null;
+                if (gobList.name == wantedGameObject)
+                {
+                    GameObject obj = (GameObject)Instantiate(gobList);
+                    obj.SetActive(false);
+                    //add the new map to the list from the value
+                    // wyh did i add this?
+                    value.Add(obj);
+                    obj.transform.parent = gobjHolder.transform;
+                    return obj;
+                }
+            }
+        }   
         return null;
     }
 }
