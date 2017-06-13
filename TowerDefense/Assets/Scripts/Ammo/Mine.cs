@@ -2,21 +2,22 @@
 
 public class Mine : MonoBehaviour
 {
-    [SerializeField]
-    private float splashRadius = 0;
-
-    [SerializeField]
-    private int damage = 50;
-
+    #region Inspector
     [SerializeField]
     private GameObject impactEffect = null;
 
+    [Header("Attributes")]
+    [SerializeField]
+    private float splashRadius = 0;
+    [SerializeField]
+    private int damage = 50;
+    #endregion
 
     private GameObject parent;
 
     void Start()
     {
-        parent = GameObject.FindGameObjectWithTag(ConstNames.Finish);
+        parent = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
     }
 
     void OnTriggerEnter(Collider other)

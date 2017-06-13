@@ -5,8 +5,10 @@ using UnityEngine;
 public class ObjectPool_Zaim : MonoBehaviour
 {
     #region Inspector
+    [Tooltip("How much Objects to hold at the Beginning")]
     [SerializeField]
     private int objectCounter = 10;
+    [Tooltip("List of All Gamobjects")]
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
     #endregion
@@ -17,6 +19,7 @@ public class ObjectPool_Zaim : MonoBehaviour
 
     private GameObject gobjHolder;
 
+
     void Awake()
     {
         // get acces onto this script
@@ -26,7 +29,7 @@ public class ObjectPool_Zaim : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gobjHolder = GameObject.FindGameObjectWithTag("Finish");
+        gobjHolder = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
 
         InitializeDictionary();
     }
@@ -71,19 +74,27 @@ public class ObjectPool_Zaim : MonoBehaviour
                     return value[i];
                 }
             }
-         
+
             //If the there are no objetcs generate new objects and add them to the list 
 
             //save the value from the dictionary by writing the wanted key
             //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
-            GameObject obj = (GameObject)Instantiate(value[0]);
-            obj.SetActive(false);
-            //add the new map to the list from the value
-            // wyh did i add this?
-            value.Add(obj);
-            obj.transform.parent = gobjHolder.transform;
-            return obj;
-        }
+            foreach (GameObject gobList in listOfGameObjects)
+            {
+                if (gobList == null)
+                    return null;
+                if (gobList.name == wantedGameObject)
+                {
+                    GameObject obj = (GameObject)Instantiate(gobList);
+                    obj.SetActive(false);
+                    //add the new map to the list from the value
+                    // wyh did i add this?
+                    value.Add(obj);
+                    obj.transform.parent = gobjHolder.transform;
+                    return obj;
+                }
+            }
+        }   
         return null;
     }
 }

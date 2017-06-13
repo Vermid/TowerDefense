@@ -17,31 +17,45 @@ public class Turret : MonoBehaviour
     [Header("Bullets(Default)")]
     [SerializeField]
     private float fireRate = 1f;
+
     [SerializeField]
     private GameObject gobjName;
 
     [Header("Laser")]
     [SerializeField]
     private bool useLaser = false;
+
     [SerializeField]
     private float slowAmount = .5f;
+
     [SerializeField]
     private int damageOverTime = 30;
+
     [SerializeField]
     private LineRenderer lineRenderer;
+
     [SerializeField]
     private ParticleSystem impactEffect;
+
     [SerializeField]
     private Light impactlight;
 
-    [Header("Unity Setup Fileds")]
+    [SerializeField]
+    private ParticleSystem laserEffect;
+
+    [Header("Unity Setup Fields")]
+
     [SerializeField]
     private Transform partToRotate;
+
     [SerializeField]
     private Transform firePoint;
+
     [SerializeField]
     private float turnSpeed = 10f;
     #endregion
+
+    public GameObject LaserGameObject;
 
     private float fireCoundown = 0f;
     private Transform target;
@@ -50,10 +64,27 @@ public class Turret : MonoBehaviour
     void Start()
     {
         //updates the target
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0f, 0.1f);
         lineRenderer = GetComponent<LineRenderer>();
 
+        if (!useLaser)
+        {
+            var laserHolder = partToRotate.gameObject.transform.Find("LaserObjectHolder");
+            laserHolder.gameObject.SetActive(false);
+        }
+        else
+        {
+            var enemyList = GameObject.FindGameObjectsWithTag("Enemy");
+            ParticleSystem ptsystem = LaserGameObject.GetComponent<ParticleSystem>();
+
+            for (int i = 0; i < enemyList.Length; i++)
+            {
+                BoxCollider targetCollider = enemyList[i].GetComponent<BoxCollider>();
+                ptsystem.trigger.SetCollider(i, targetCollider);
+            }
+        }
     }
+
 
     void UpdateTarget()
     {
@@ -92,7 +123,7 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        if (target == null)
+        if (target == null || targetEnemy != null && targetEnemy.GetHealth() <= 0)
         {
             if (useLaser)
             {
@@ -102,27 +133,30 @@ public class Turret : MonoBehaviour
                     //use play for particle effect or they will just despawn 
                     impactEffect.Stop();
                     impactlight.enabled = false;
+                    LaserGameObject.SetActive(false);
                 }
             }
             return;
         }
-
-        LockOnTarget();
-
-        if (useLaser)
+        if (targetEnemy != null && targetEnemy.GetHealth() >= 0)
         {
-            Laser();
-        }
-        else
-        {
-            if (fireCoundown <= 0f)
+            LockOnTarget();
+
+            if (useLaser)
             {
-                Shoot();
-                //why 1/1 ? this dont make sense try somewthing out with the variables!!
-                fireCoundown = 1f / fireRate;
+                Laser();
             }
-            //subs a seconds(framerate) away frm the firecoundown
-            fireCoundown -= Time.deltaTime;
+            else
+            {
+                if (fireCoundown <= 0f)
+                {
+                    Shoot();
+                    //why 1/1 ? this dont make sense try somewthing out with the variables!!
+                    fireCoundown = 1f / fireRate;
+                }
+                //subs a seconds(framerate) away frm the firecoundown
+                fireCoundown -= Time.deltaTime;
+            }
         }
     }
 
@@ -141,69 +175,38 @@ public class Turret : MonoBehaviour
                 Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
             //set the partToRotate.rotation  with the euler. Watch out Euler rotates  X Y and Z !! 
             partToRotate.rotation = Quaternion.Euler(0F, rotation.y, 0F);
-         //   SetAnim(rotation);
+
         }
         else
         {
             //this looks like the right way to fix the bug 
-            var bulletHolder = gameObject.transform.FindChild("BulletHolder");
+            var bulletHolder = gameObject.transform.Find("BulletHolder");
             if (useLaser)
             {
                 lineRenderer.SetPosition(0, transform.position);
                 lineRenderer.SetPosition(1, transform.position);
                 return;
             }
-            if (bulletHolder.childCount > 0 )
+            if (bulletHolder.childCount > 0)
             {
                 for (int i = 0; i < bulletHolder.childCount; i++)
                 {
                     bulletHolder.GetChild(i).gameObject.SetActive(false);
                 }
             }
-            
-            
         }
     }
 
-    //void SetAnim(Vector3 dir)
-    //{
-    //    //Debug.Log(dir + "ParttoRtoate");
-
-    //    if (dir.x >= 0 && dir.y == 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("right");
-    //    }
-
-    //    if (dir.x <= 0 && dir.y == 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("left");
-    //    }
-
-    //    if (dir.x == 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("front");
-    //    }
-
-    //    if (dir.x == 0.0f && dir.y <= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("back");
-    //    }
-
-    //    //cross
-    //    if (dir.x >= 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("right 45");
-    //    }
-
-    //    if (dir.x <= 0.0f && dir.y >= 0.0f)
-    //    {
-    //        armatureComponent.animation.Play("left 45");
-    //    }
-    //}
-
-
+    private int particleSystemCounter = 0;
     void Laser()
     {
+        ParticleSystem ptsystem = LaserGameObject.GetComponent<ParticleSystem>();
+
+        BoxCollider targetCollider = target.GetComponent<BoxCollider>();
+        ptsystem.trigger.SetCollider(particleSystemCounter++, targetCollider);
+
+        LaserGameObject.SetActive(true);
+
         targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
         targetEnemy.Slow(slowAmount);
 
@@ -219,7 +222,9 @@ public class Turret : MonoBehaviour
 
         Vector3 dir = firePoint.position - target.position;
 
-        impactEffect.transform.position = target.position;//+ dir.normalized;
+        var offsett = new Vector3(0, 2f, 0);
+
+        impactEffect.transform.position = target.position + offsett; //+ dir.normalized;
 
         impactEffect.transform.rotation = Quaternion.LookRotation(dir);
     }
@@ -235,7 +240,7 @@ public class Turret : MonoBehaviour
         bulletObj.transform.rotation = firePoint.rotation;
 
         //var bulletHolder = gameObject.transform.parent.FindChild("BulletHolder");
-        var bulletHolder = gameObject.transform.FindChild("BulletHolder");
+        var bulletHolder = gameObject.transform.Find("BulletHolder");
 
         bulletObj.transform.parent = bulletHolder.transform;
         bulletObj.SetActive(true);
