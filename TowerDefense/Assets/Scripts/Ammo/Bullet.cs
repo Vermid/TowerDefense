@@ -20,13 +20,14 @@ public class Bullet : MonoBehaviour
     private int damage = 50;
     #endregion
 
-    [SerializeField] private Enums.WeaponType weaponType;
+    private Enums.WeaponType weaponType;
 
     private Transform target;
 
-    public void Seek(Transform _target)
+    public void Seek(Transform _target ,Enums.WeaponType wType)
     {
         target = _target;
+        weaponType = wType;
     }
 
     // Update is called once per frame
@@ -117,7 +118,8 @@ public class Bullet : MonoBehaviour
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
         {
-            e.TakeDamage(damage);
+           // e.TakeDamage(damage);
+            e.GetDamage(damage, weaponType);
         }
     }
 

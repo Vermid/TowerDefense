@@ -57,7 +57,6 @@ public class Node : MonoBehaviour
 
     void BuildTurret(TurretBlueprint bluePrint)
     {
-
         //if the player has the money to buy the turret
         if (PlayerStarts.money < bluePrint.cost)
         {
@@ -94,9 +93,9 @@ public class Node : MonoBehaviour
             return;
         }
 
-        if (turret.transform.FindChild(ConstNames.SpawnPoint))
+        if (turret.transform.Find(ConstNames.SpawnPoint))
         {
-            var children = turret.transform.FindChild(ConstNames.SpawnPoint);
+            var children = turret.transform.Find(ConstNames.SpawnPoint);
             for (int i = 0; i < children.childCount; i++)
             {
                 children.GetChild(i).gameObject.SetActive(false);
@@ -130,12 +129,14 @@ public class Node : MonoBehaviour
 
     public void SellTurret()
     {
+        turret.gameObject.GetComponent<Turret>().RejectAmmo();
+
         PlayerStarts.money += turretBlueprint.GetSellAmount();
         GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
         Destroy(effect, 5f);
-        Destroy(turret);
+
+        Destroy(turret,2f);
         turretBlueprint = null;
-        //buildManager.DeselectNode();
     }
 
     void OnMouseEnter()

@@ -19,6 +19,13 @@ public class FactoryBase : MonoBehaviour
 
     [SerializeField]
     private int mineRadius = 5;
+
+    [SerializeField]
+    private bool groundType;
+
+    [SerializeField]
+    private bool airType;
+
     #endregion
 
     private float countDown = 2F;
@@ -29,7 +36,7 @@ public class FactoryBase : MonoBehaviour
 
     void Start()
     {
-        children = transform.FindChild(ConstNames.SpawnPoint).transform;
+        children = transform.Find(ConstNames.SpawnPoint).transform;
 
         radius = GetComponentInChildren<SphereCollider>().radius = mineRadius;
         radius /= 2;
@@ -62,16 +69,34 @@ public class FactoryBase : MonoBehaviour
     /// </summary>
     void SpawnPoint()
     {
-        targets = Waypoints.Points;
-
-        float distance = Mathf.Infinity;
-
-        foreach (Transform waypoint in targets)
+        if (groundType)
         {
-            if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+            targets = Waypoints.GroundPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
             {
-                distance = Vector3.Distance(waypoint.position, transform.position);
-                children.transform.position = waypoint.position;
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    children.transform.position = waypoint.position;
+                }
+            }
+        }
+        if (airType)
+        {
+            targets = Waypoints.AirPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
+            {
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    children.transform.position = waypoint.position;
+                }
             }
         }
     }
@@ -104,5 +129,4 @@ public class FactoryBase : MonoBehaviour
         if (children != null)
             Gizmos.DrawWireSphere(children.transform.position, mineRadius * 2);
     }
-
 }

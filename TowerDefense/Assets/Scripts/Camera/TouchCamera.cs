@@ -21,10 +21,10 @@ public class TouchCamera : MonoBehaviour
     public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
     public float orthoZoomSpeed = 0.5f;        // The rate of change of the orthographic size in orthographic mode.
 
-    private Camera camera;
+    private Camera cam;
     void Start()
     {
-        camera = GetComponent<Camera>();
+        cam = GetComponent<Camera>();
       //  mapCollider = map.GetComponentInChildren<BoxCollider>();
     }
 
@@ -114,7 +114,7 @@ public class TouchCamera : MonoBehaviour
                 //}
                 var element = transform.TransformDirection(
                         (Vector3)
-                            ((oldTouchPositions[0] - newTouchPosition) * camera.orthographicSize / camera.pixelHeight * 2f *
+                            ((oldTouchPositions[0] - newTouchPosition) * cam.orthographicSize / cam.pixelHeight * 2f *
                              touchSpeed));
                 if (element.x < 112)
                     transform.position += element;
@@ -142,21 +142,21 @@ public class TouchCamera : MonoBehaviour
             float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
             // If the camera is orthographic...
-            if (camera.orthographic)
+            if (cam.orthographic)
             {
                 // ... change the orthographic size based on the change in distance between the touches.
-                camera.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
+                cam.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
 
                 // Make sure the orthographic size never drops below zero.
-                camera.orthographicSize = Mathf.Max(camera.orthographicSize, 0.1f);
+                cam.orthographicSize = Mathf.Max(cam.orthographicSize, 0.1f);
             }
             else
             {
                 // Otherwise change the field of view based on the change in distance between the touches.
-                camera.fieldOfView += deltaMagnitudeDiff * perspectiveZoomSpeed;
+                cam.fieldOfView += deltaMagnitudeDiff * perspectiveZoomSpeed;
 
                 // Clamp the field of view to make sure it's between 10 and 30.
-                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, 10, 30);
+                cam.fieldOfView = Mathf.Clamp(cam.fieldOfView, 10, 30);
             }
         }
     }

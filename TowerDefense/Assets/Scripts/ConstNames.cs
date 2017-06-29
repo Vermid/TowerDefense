@@ -19,7 +19,7 @@ public class ConstNames : MonoBehaviour
     #region Function
 
     public const string UpdateTarget = "UpdateTarget";
-    public const string Destroy = "Destroy";
+    public const string Dest = "Destroy";
 
     #endregion
 }

@@ -18,8 +18,11 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int monsterHeadBounty = 50;
 
+    [SerializeField]
+    private float healthSpeed = 100;
+
     [HideInInspector]
-    public float speed;
+    public float speed = 0;
 
     [SerializeField]
     private GameObject deathEffect;
@@ -27,36 +30,121 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Image healthBar;
 
+    [SerializeField]
+    private bool groundType;
+    [SerializeField]
 
+    private bool airType;
     [SerializeField]
     private Enums.ArmorType armorType;
     #endregion
 
+    public static Enemy current;
+
+    private float fullDamage = 1;
+    private float halfDamage = .5F;
+    private float lowDamage = .25F;
+
     private float health;
     private float respawn = 5;
     private bool spawn = true;
-
     private Animator anim;
+    private bool isDead = false;
+
+    public EnemyMovement enemyMovement;
     void Start()
     {
         anim = GetComponent<Animator>();
+        enemyMovement = GetComponent<EnemyMovement>();
+
+        current = this;
+        isDead = false;
         health = startHealth;
         speed = startSpeed;
-        current = this;
-        spawn = false;
+       // spawn = false;
     }
 
-    private void TakeRealDamage(float amount, Enums.ArmorType aType)
+    private void Awake()
     {
-        if (aType == Enums.ArmorType.Light)
+        isDead = false;
+        health = startHealth;
+        speed = startSpeed;
+    }
+    private void OnEnable()
+    {
+        isDead = false;
+        //health = startHealth;
+        //speed = startSpeed;
+        // spawn = false;
+    }
+
+    public bool GetAirType()
+    {
+        return airType;
+    }
+
+    public bool GetGroundType()
+    {
+        return groundType;
+    }
+
+    public void GetDamage(float amount, Enums.WeaponType wType)
+    {
+        switch (wType)
         {
+            case Enums.WeaponType.Pierce:
+                if (armorType == Enums.ArmorType.Light)
+                {
+                    TakeDamage(amount * fullDamage);
+                }
+                else if (armorType == Enums.ArmorType.Heavy)
+                {
+                    TakeDamage(amount * halfDamage);
+                }
+                else if (armorType == Enums.ArmorType.Magic)
+                {
+                    TakeDamage(amount * lowDamage);
+                }
+                break;
+
+            case Enums.WeaponType.Normal:
+                if (armorType == Enums.ArmorType.Light)
+                {
+                    TakeDamage(amount * halfDamage);
+                }
+                else if (armorType == Enums.ArmorType.Heavy)
+                {
+                    TakeDamage(amount * fullDamage);
+                }
+                else if (armorType == Enums.ArmorType.Magic)
+                {
+                    TakeDamage(amount * lowDamage);
+                }
+                break;
+
+            case Enums.WeaponType.Chaotic:
+                if (armorType == Enums.ArmorType.Light)
+                {
+                    TakeDamage(amount * halfDamage);
+                }
+                else if (armorType == Enums.ArmorType.Heavy)
+                {
+                    TakeDamage(amount * halfDamage);
+                }
+                else if (armorType == Enums.ArmorType.Magic)
+                {
+                    TakeDamage(amount * fullDamage);
+                }
+                break;
         }
-        if (aType == Enums.ArmorType.Magic)
-        {
-        }
-        if (aType == Enums.ArmorType.Heavy)
-        {
-        }
+    }
+
+    private void Update()
+    {
+        var result = fillbar(health, 0, startHealth, 0, 1);
+
+        if (result != healthBar.fillAmount)
+            healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, result, Time.deltaTime * healthSpeed);
     }
 
     public float GetHealth()
@@ -67,30 +155,21 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         health -= amount;
-        healthBar.fillAmount = health / startHealth; // change this to interpolation
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
+            isDead = true;
             Die();
         }
-        if (spawn)
-        {
-            spawn = false;
-        }
     }
-
-    public static Enemy current;
+    private float fillbar(float value, float inMin, float inMax, float outMin, float outMax)
+    {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
 
     public bool GetRespawnTimer()
     {
         return spawn;
     }
-
-    public void Slow(float pct)
-    {
-        //slows the enemy  speed * percentage 
-        speed = startSpeed * (1f - pct);
-    }
-
 
     void Die()
     {
@@ -104,23 +183,30 @@ public class Enemy : MonoBehaviour
         gobj.SetActive(true);
 
         anim.SetBool("IsDead", true);
-
-        Invoke("SetSpawn", respawn);
-
+        StartCoroutine(SetSpawn(respawn));
         PlayerStarts.money += monsterHeadBounty;
+
+        WaveManager.EnemysInScene--;
+        enemyMovement.LastBreath();
     }
 
-    private void SetSpawn()
+    IEnumerator SetSpawn(float time)
     {
-        spawn = true;
-        anim.SetBool("IsDead", false);
+        for (int i = 0; i <= 1; i++)
+        {
+            if (i == 1)
+            {
+                gameObject.SetActive(false);
+                Invoke("ResetStats", .5f);
+            }
+            yield return new WaitForSeconds(time);
+        }
+    }
+
+    private void ResetStats()
+    {
         health = startHealth;
-        gameObject.SetActive(false);
-    }
-
-    void OnParticleCollision(GameObject other)
-    {
-        //dont destroy the laser you have to destroy the particle. One by one
-        //Destroy(other);
+        healthBar.fillAmount = startHealth;
+        spawn = true;
     }
 }
