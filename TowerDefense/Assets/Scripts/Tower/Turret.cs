@@ -73,16 +73,15 @@ public class Turret : MonoBehaviour
     private Transform startPosition;
     private Transform bulletHolder;
     private Transform objectPool;
-    // private Enemy targetEnemy;
+    private List<Component> laserColliders = new List<Component>();
+    private bool startwave = true;
+    private GameObject[] enemysThisWave;
+
     void Start()
     {
         startPosition = GameObject.FindGameObjectWithTag(ConstNames.Start).transform;
         bulletHolder = gameObject.transform.Find("BulletHolder");
         objectPool = GameObject.FindGameObjectWithTag("ObjectPool").transform;
-
-        //updates the target
-        //InvokeRepeating("UpdateTarget", 0f, 0.5f);
-        // lineRenderer = GetComponent<LineRenderer>();
 
         if (!useLaser)
         {
@@ -90,9 +89,6 @@ public class Turret : MonoBehaviour
             laserHolder.gameObject.SetActive(false);
         }
     }
-
-    private GameObject nextTarget = null;
-    float next = Mathf.Infinity;
 
     void UpdateTarget()
     {
@@ -104,17 +100,22 @@ public class Turret : MonoBehaviour
         //sets the nearest enemy
         GameObject nearestEnemy = null;
         //search throught the enmies array
-        foreach (GameObject enemy in enemysThisWave)
+        if (enemysThisWave != null)
         {
-            //you get the distance if you sub the turret position with the enemy.position
-            //this is the distance to enemy
-            float distanceToEnemys = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distanceToEnemys < shortestDistance)
+            foreach (GameObject enemy in enemysThisWave)
             {
-                shortestDistance = distanceToEnemys;
-                //set the found enemy to nearestEnemy
-                nearestEnemy = enemy;
-                next = shortestDistance;
+                if (enemy.GetComponent<Enemy>().GetHealth() > 0 && enemy.gameObject.activeInHierarchy)
+                {
+                    //you get the distance if you sub the turret position with the enemy.position
+                    //this is the distance to enemy
+                    float distanceToEnemys = Vector3.Distance(transform.position, enemy.transform.position);
+                    if (distanceToEnemys < shortestDistance)
+                    {
+                        shortestDistance = distanceToEnemys;
+                        //set the found enemy to nearestEnemy
+                        nearestEnemy = enemy;
+                    }
+                }
             }
         }
 
@@ -137,8 +138,6 @@ public class Turret : MonoBehaviour
         }
     }
 
-    private bool startwave = true;
-    private GameObject[] enemysThisWave;
     void Update()
     {
         if (WaveManager.EnemysInScene > 0 && startwave)
@@ -147,64 +146,17 @@ public class Turret : MonoBehaviour
             startwave = false;
             InvokeRepeating("UpdateTarget", 0, 0.1f);
         }
-        if (WaveManager.EnemysInScene == 0)
+
+        if (WaveManager.EnemysInScene == 0 && !startwave)
         {
             startwave = true;
+            LockOnTarget(startPosition);
+            enemysThisWave = null;
+            CancelInvoke("UpdateTarget");
+            target = null;
         }
 
-        if (target == null || target.GetComponent<Enemy>().GetHealth() <= 0)
-        {
-            if (useLaser)
-            {
-                //       if (lineRenderer.enabled)
-                //{
-                //  lineRenderer.enabled = false;
-                //use play for particle effect or they will just despawn 
-                impactEffect.Stop();
-                // impactlight.enabled = false;
-                LaserGameObject.SetActive(false);
-                //  }
-            }
-            if (WaveManager.EnemysInScene <= 0)
-            {
-                LockOnTarget(startPosition);
-                enemysThisWave = null;
-                CancelInvoke("UpdateTarget");
-            }
-            else
-            {
-                float shortestDistance = Mathf.Infinity;
-                GameObject nearestEnemy = null;
-
-                foreach (GameObject enemy in enemysThisWave)
-                {
-                    float distanceToEnemys = Vector3.Distance(transform.position, enemy.transform.position);
-                    if (distanceToEnemys < shortestDistance)
-                    {
-                        shortestDistance = distanceToEnemys;
-                        nearestEnemy = enemy;
-                        next = shortestDistance;
-                    }
-                }
-                if (nearestEnemy != null && shortestDistance <= range)
-                {
-                    if (groundType == nearestEnemy.GetComponent<Enemy>().GetGroundType())
-                    {
-                        //set the transform from the nearestEnemys to the target
-                        target = nearestEnemy.transform;
-                        LockOnTarget(target);
-                    }
-                    if (airType == nearestEnemy.GetComponent<Enemy>().GetAirType())
-                    {
-                        //set the transform from the nearestEnemys to the target
-                        target = nearestEnemy.transform;
-                        LockOnTarget(target);
-                    }
-                }
-            }
-            //return;
-        }
-        if (target != null && target.GetComponent<Enemy>().GetHealth() > 0)
+        if (target != null)
         {
             LockOnTarget(target);
 
@@ -224,45 +176,51 @@ public class Turret : MonoBehaviour
                 fireCoundown -= Time.deltaTime;
             }
         }
-    }
-
-    void LockOnTarget(Transform _target)
-    {
-        if (_target.gameObject.activeInHierarchy)
-        {
-            //gives the current dir  sub target from current
-            Vector3 dir = _target.position - transform.position;
-            dir.y = dir.y - 5f;
-
-            //saves the dir as quaternion
-            Quaternion lookRotation = Quaternion.LookRotation(dir);
-            //with lerp you can make things smoother
-            //with  Time.deltaTime * turnSpeed you make the rotation turn in seconds
-            //The three angles giving the three rotation matrices are called Euler angles
-            Vector3 rotation =
-                Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
-            partToRotate.rotation = Quaternion.Euler(rotation.x, rotation.y, 0f);
-        }
         else
         {
-            //this looks like the right way to fix the bug 
             var bulletHolder = gameObject.transform.Find("BulletHolder");
             if (useLaser)
             {
+                //       if (lineRenderer.enabled)
+                //{
+                //  lineRenderer.enabled = false;
+                //use play for particle effect or they will just despawn 
+                //         impactEffect.Stop();
+                // impactlight.enabled = false;
+                //      LaserGameObject.SetActive(false);
+                //  }
                 //  lineRenderer.SetPosition(0, transform.position);
                 //  lineRenderer.SetPosition(1, transform.position);
-                return;
+                impactEffect.Stop();
+                // impactlight.enabled = false;
+                LaserGameObject.SetActive(false);
             }
-            if (bulletHolder.childCount > 0)
+            if (!useLaser && bulletHolder.childCount > 0)
             {
                 for (int i = 0; i < bulletHolder.childCount; i++)
                 {
                     bulletHolder.GetChild(i).gameObject.SetActive(false);
                 }
             }
+            UpdateTarget();
         }
     }
-    private List<Component> laserColliders = new List<Component>();
+
+    void LockOnTarget(Transform _target)
+    {
+        //gives the current dir  sub target from current
+        Vector3 dir = _target.position - transform.position;
+        dir.y = dir.y - 5f;
+
+        //saves the dir as quaternion
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        //with lerp you can make things smoother
+        //with  Time.deltaTime * turnSpeed you make the rotation turn in seconds
+        //The three angles giving the three rotation matrices are called Euler angles
+        Vector3 rotation =
+            Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
+        partToRotate.rotation = Quaternion.Euler(rotation.x, rotation.y, 0f);
+    }
 
     void Laser()
     {
@@ -329,10 +287,12 @@ public class Turret : MonoBehaviour
     public void RejectAmmo()
     {
         CancelInvoke("UpdateTarget");
-
-        for (int i = 0; i < bulletHolder.childCount; i++)
+        if (!useLaser)
         {
-            bulletHolder.GetChild(i).parent = objectPool;
+            for (int i = 0; i < bulletHolder.childCount; i++)
+            {
+                bulletHolder.GetChild(i).parent = objectPool;
+            }
         }
     }
 

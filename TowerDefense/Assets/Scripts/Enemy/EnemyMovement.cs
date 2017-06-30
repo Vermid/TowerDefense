@@ -149,8 +149,14 @@ public class EnemyMovement : MonoBehaviour
     void EndPath()
     {
         gameObject.SetActive(false);
-
+        //WaveManager.EnemysInScene--;
         PlayerStarts.lives--;
+        var pathStart = GameObject.FindGameObjectWithTag(ConstNames.Start);
+
+        transform.position = pathStart.transform.position;
+        wavePointIndex = 0;
+        gameObject.SetActive(true);
+        moving = true;
     }
 
     void LockOnTarget()

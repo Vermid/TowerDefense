@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 //TODO: check if you should use a pool for the turrets or not
 
 public class BuildManager : MonoBehaviour

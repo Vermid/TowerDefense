@@ -93,6 +93,11 @@ public class Node : MonoBehaviour
             return;
         }
 
+        if (turret.gameObject.GetComponent<Turret>() != null)
+            turret.gameObject.GetComponent<Turret>().RejectAmmo();
+        if (turret.gameObject.GetComponent<FactoryBase>() != null)
+            turret.gameObject.GetComponent<FactoryBase>().RejectAmmo();
+
         if (turret.transform.Find(ConstNames.SpawnPoint))
         {
             var children = turret.transform.Find(ConstNames.SpawnPoint);
@@ -124,18 +129,19 @@ public class Node : MonoBehaviour
         gobj.transform.position = transform.position;
         gobj.transform.rotation = transform.rotation;
         gobj.SetActive(true);
-
     }
-
     public void SellTurret()
     {
-        turret.gameObject.GetComponent<Turret>().RejectAmmo();
+        if(turret.gameObject.GetComponent<Turret>()!= null)
+            turret.gameObject.GetComponent<Turret>().RejectAmmo();
+        if (turret.gameObject.GetComponent<FactoryBase>() != null)
+            turret.gameObject.GetComponent<FactoryBase>().RejectAmmo();
 
         PlayerStarts.money += turretBlueprint.GetSellAmount();
         GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
         Destroy(effect, 5f);
 
-        Destroy(turret,2f);
+        Destroy(turret);
         turretBlueprint = null;
     }
 

@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 421}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -68,10 +68,10 @@ MonoBehaviour:
     y: 30
     width: 1536
     height: 731
-  m_MinSize: {x: 915, y: 371}
-  m_MaxSize: {x: 22010, y: 14021}
+  m_MinSize: {x: 917, y: 371}
+  m_MaxSize: {x: 22012, y: 14021}
   vertical: 1
-  controlID: 46
+  controlID: 70
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -90,8 +90,8 @@ MonoBehaviour:
     y: 0
     width: 202
     height: 555
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -145,7 +145,7 @@ MonoBehaviour:
     y: 0
     width: 1536
     height: 781
-  m_MinSize: {x: 950, y: 421}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &7
 MonoBehaviour:
@@ -167,7 +167,7 @@ MonoBehaviour:
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
-  m_LastLoadedLayoutName: 
+  m_LastLoadedLayoutName: Zaim
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -210,10 +210,10 @@ MonoBehaviour:
     y: 0
     width: 1536
     height: 555
-  m_MinSize: {x: 915, y: 271}
-  m_MaxSize: {x: 22010, y: 10021}
+  m_MinSize: {x: 917, y: 271}
+  m_MaxSize: {x: 22012, y: 10021}
   vertical: 0
-  controlID: 47
+  controlID: 71
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -401,9 +401,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -15.926687, y: 6.204402, z: 112.82576}
+    m_Target: {x: -35.061028, y: -50.426743, z: 117.67372}
     speed: 2
-    m_Value: {x: -15.926687, y: 6.204402, z: 112.82576}
+    m_Value: {x: -35.061028, y: -50.426743, z: 117.67372}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -426,13 +426,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.04787519, y: -0.06647585, z: 0.0031932942, w: -0.9966337}
+    m_Target: {x: -0.29981545, y: 0.0022879362, z: -0.00071903865, w: -0.9539943}
     speed: 2
-    m_Value: {x: -0.04787519, y: -0.06647586, z: 0.0031932942, w: -0.9966337}
+    m_Value: {x: -0.29981545, y: 0.0022879362, z: -0.00071903865, w: -0.9539943}
   m_Size:
-    m_Target: 149.28386
+    m_Target: 344.52628
     speed: 2
-    m_Value: 149.28386
+    m_Value: 344.52628
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -497,9 +497,9 @@ MonoBehaviour:
     height: 534
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
+    m_SelectedIDs: ac250000
     m_LastClickedID: 0
-    m_ExpandedIDs: e4fbffff000000009e290000c62d0000482f0000
+    m_ExpandedIDs: dcbffdffb6c0fdff90c1fdffaac1fdffe4fbffff00000000202b0000882c0000422e0000506f010038730100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -559,7 +559,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Prefabs/Tower
+    - Assets/Prefabs/Ammo/Effects
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
@@ -570,7 +570,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 5e220000
     m_LastClickedID: 8798
-    m_ExpandedIDs: 000000003c2500009a250000a6250000b22500000c26000082260000a2260000d6260000fe26000048270000522700008e270000b8270000002800000228000014280000322800003e2800004c2800004e28000066280000b8280000ca280000de280000f0280000da2f0000be330000c0330000c2330000c4330000c6330000c8330000ca330000cc330000ce330000d0330000d2330000
+    m_ExpandedIDs: 000000003c2500009a250000a6250000b22500000c26000082260000a2260000d6260000fe26000048270000522700008e270000b8270000002800000228000014280000322800003e2800004c2800004e28000066280000b8280000ca280000de280000f028000036290000de2f0000b8330000ba330000bc330000be330000c0330000c2330000c4330000c6330000c8330000ca330000cc330000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -598,7 +598,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003c2500009a250000a6250000b22500000c26000082260000a2260000d6260000fe26000048270000522700008e270000b8270000002800000228000014280000322800003e2800004c2800004e28000066280000b8280000ca280000de280000f028000032290000da2f0000be330000c0330000c2330000c4330000c6330000c8330000ca330000cc330000ce330000d0330000d2330000
+    m_ExpandedIDs: 000000003c2500009a250000a62500000c260000e22600004827000052270000002800000228000066280000de280000f028000036290000de2f0000b8330000ba330000bc330000be330000c0330000c2330000c4330000c6330000c8330000ca330000cc330000343b0000723b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
