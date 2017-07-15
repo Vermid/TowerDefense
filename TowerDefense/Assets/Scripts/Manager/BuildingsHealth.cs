@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class BuildingsHealth : MonoBehaviour
 {
-
+    #region Inspector
+    [Header("Attributes")]
     [SerializeField]
     private int health = 10;
 
     [SerializeField]
     private int money = 100;
-
+    #endregion
     public static BuildingsHealth instance;
 
     void Awake()

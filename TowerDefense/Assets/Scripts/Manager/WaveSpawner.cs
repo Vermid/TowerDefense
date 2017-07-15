@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
@@ -15,12 +13,22 @@ public class WaveSpawner : MonoBehaviour
     private float timeBetweenWaves = 5F;
     [SerializeField]
     private int objectCounter = 10;
+    [Tooltip("List of all Enemys")]
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
+    [Tooltip("List of how much Enemys will spawn in each Wave")]
     [SerializeField]
     private List<int> enemyCounter = new List<int>();
 
+    [SerializeField]
+    public struct Elements
+    {
+        public GameObject g;
+        public int inte;
+    }
+
     #endregion
+    private bool nextWave = false;
 
     private float countDown = 2F;
 
@@ -29,43 +37,54 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            nextWave = true;
+        }
+        Debug.Log("NextWave Middle " + nextWave);
+
         //spawn enemys only if the coundown reaches 0
-        if (countDown <= 0F)
+        if (nextWave)
         {
             StartCoroutine(SpawnWave());
-            //set the coundown back to any time you want  in this chase tmeBetweenWaves
-            countDown = timeBetweenWaves;
+            nextWave = false;
         }
-        //count in seconds?
-        countDown -= Time.deltaTime; //time past since last frames
 
-        countDown = Mathf.Clamp(countDown, 0f, Mathf.Infinity);
+
+        #region EndlessWave
+        //if (countDown <= 0F)
+        //if (nextWave)
+        //{
+        //    StartCoroutine(SpawnWave());
+        //    //set the coundown back to any time you want  in this chase tmeBetweenWaves
+        //    countDown = timeBetweenWaves;
+        //}
+        //count in seconds?
+        //countDown -= Time.deltaTime; //time past since last frames
+
+        //countDown = Mathf.Clamp(countDown, 0f, Mathf.Infinity);
 
         //show the countdown into the text Object
         // WaveCoundownText.text = Mathf.Round(countDown).ToString();
         //string format to show a better contdown 
-        WaveCoundownText.text = string.Format("{0:00.00}", countDown);
+        // WaveCoundownText.text = string.Format("{0:00.00}", countDown);
+        #endregion
     }
 
 
     IEnumerator SpawnWave()
     {
-
         //TODO: this works for now change it later 
         //loop the Inspector list
-        foreach (GameObject gobj in listOfGameObjects)
+        //foreach (GameObject gobj in listOfGameObjects)
+        for (int x = 0; x < listOfGameObjects.Count; x++)
         {
-            if (waveIndex != 0)
+            if (listOfGameObjects[x] != null)
             {
-                objectCounter += 1;
-            }
-            //check if the list is hight than the gameobjects set
-            if (gobj != null)
-            {
-                for (int i = 0; i < enemyCounter.Count;)
+                for (int i = 0; i < enemyCounter[x];)
                 {
-                    if(SpawnEnemy(gobj.name))
-                        i++; 
+                    if (SpawnEnemy(listOfGameObjects[x].name))
+                        i++;
                     yield return new WaitForSeconds(.1F);
                 }
             }
@@ -85,7 +104,6 @@ public class WaveSpawner : MonoBehaviour
         if (obj == null)
             return false;
         var spawn = obj.GetComponent<Enemy>().GetRespawnTimer();
-        Debug.Log(spawn);
         if (!spawn)
             return false;
 
