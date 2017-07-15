@@ -11,7 +11,7 @@ public class Mine : MonoBehaviour
     [SerializeField]
     private float splashRadius = 0;
     [SerializeField]
-    private int damage = 50;
+    public static float damage = 50;
 
     #endregion
 
@@ -22,7 +22,6 @@ public class Mine : MonoBehaviour
     {
         parent = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
     }
-
 
     public void SetWeapontType(Enums.WeaponType _wType)
     {

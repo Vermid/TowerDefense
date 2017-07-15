@@ -17,7 +17,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private List<WaveGenerator> listOfGameObjects = new List<WaveGenerator>();
     #endregion
-    private bool nextWave = false;
+   // private bool nextWave = false;
     private int waveIndex = 0;
     //private float countDown = 2F;
     public static int EnemysInScene = 0;
@@ -53,6 +53,14 @@ public class WaveManager : MonoBehaviour
         #endregion
     }
 
+    public void StartWave()
+    {
+        if (EnemysInScene == 0 && waveIndex < listOfGameObjects.Count)
+        {
+            Debug.Log("Start Next Wave");
+            SpawnWave();
+        }
+    }
     void SpawnWave()
     {
         //loop the Inspector list
@@ -123,7 +131,7 @@ public class WaveManager : MonoBehaviour
 
         if (!obj.GetComponent<Enemy>().GetRespawnTimer())
             return false;
-        var enemy = obj.GetComponent<Enemy>();
+       // var enemy = obj.GetComponent<Enemy>();
 
         //sets the position from the map
         obj.transform.position = spawnPoint.transform.position;

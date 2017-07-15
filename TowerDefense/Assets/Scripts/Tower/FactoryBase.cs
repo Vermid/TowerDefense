@@ -16,6 +16,9 @@ public class FactoryBase : MonoBehaviour
     private float timeBetweenSpawn = 5F;
 
     [SerializeField]
+    public float damage = Mine.damage;
+
+    [SerializeField]
     private int maxMines = 5;
 
     [SerializeField]

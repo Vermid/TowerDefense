@@ -13,7 +13,11 @@ public class ConstNames : MonoBehaviour
     public const string Finish = "Finish";
     public const string MainMenu = "MainMenu";
     public const string ObjectPool = "ObjectPool";
+    public const string MineFactory = "MineFactory";
+    public const string TurretHolder = "TurretHolder";
 
+
+    
     #endregion
 
     #region Function

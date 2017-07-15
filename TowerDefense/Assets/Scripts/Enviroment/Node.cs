@@ -19,6 +19,8 @@ public class Node : MonoBehaviour
     // [Header("This is needed for the Player Turret")]
     [HideInInspector]
     public GameObject turret;
+    public GameObject startTurret;
+
     [HideInInspector]
     public TurretBlueprint turretBlueprint;
     #endregion
@@ -27,13 +29,23 @@ public class Node : MonoBehaviour
     private Renderer rend;
     private Color startColor;
     private GameObject objectHolder;
+    private GameObject turretHolder;
     void Start()
     {
         buildManager = BuildManager.instance;
         rend = GetComponent<Renderer>();
         startColor = rend.material.color;
         objectHolder = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
+        objectHolder = GameObject.FindGameObjectWithTag(ConstNames.TurretHolder);
 
+
+        if (startTurret != null)
+        {
+            GameObject tmp_turret = (GameObject)Instantiate(startTurret, GetBuildPosition(), Quaternion.identity, objectHolder.transform);
+
+            turret = tmp_turret;
+            buildManager.DeselectNode();
+        }
     }
     //change all the mouse action for Touch actions (android)
     void OnMouseDown()
@@ -41,7 +53,7 @@ public class Node : MonoBehaviour
         //if shop ui is over a node you cant build you will click on the shopUi turret 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-
+        CameraScript.current.LastPosition();
 
         if (turret != null)
         {
@@ -55,21 +67,26 @@ public class Node : MonoBehaviour
         BuildTurret(buildManager.GetTurretToBuild());
     }
 
+    void OnMouseDrag()
+    {
+        CameraScript.current.DragObject();
+    }
+
     void BuildTurret(TurretBlueprint bluePrint)
     {
         //if the player has the money to buy the turret
-        if (PlayerStarts.money < bluePrint.cost)
+        if (PlayerStarts.money < bluePrint.GetCostAmount())
         {
             Debug.Log("Not enough money");
             return;
         }
 
-        PlayerStarts.money -= bluePrint.cost;
+        PlayerStarts.money -= bluePrint.GetCostAmount();
         //should we use the pool here? 
-        GameObject tmp_turret = (GameObject)Instantiate(bluePrint.prefab, GetBuildPosition(), Quaternion.identity);
+        GameObject tmp_turret = (GameObject)Instantiate(bluePrint.GetPrefab(), GetBuildPosition(), Quaternion.identity, objectHolder.transform);
+        turretBlueprint = bluePrint;
 
         turret = tmp_turret;
-        turretBlueprint = bluePrint;
         Debug.Log("Turret build!! Money left: " + PlayerStarts.money);
 
         GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(buildManager.buildEffect.name);
@@ -87,16 +104,12 @@ public class Node : MonoBehaviour
     public void UpgradeTurret()
     {
         //if the player has the money to buy the turret
-        if (PlayerStarts.money < turretBlueprint.upgradeCost)
+        if (PlayerStarts.money < turret.GetComponent<Turret>().UpgradePrice)
         {
             Debug.Log("Not enough money");
             return;
         }
 
-        if (turret.gameObject.GetComponent<Turret>() != null)
-            turret.gameObject.GetComponent<Turret>().RejectAmmo();
-        if (turret.gameObject.GetComponent<FactoryBase>() != null)
-            turret.gameObject.GetComponent<FactoryBase>().RejectAmmo();
 
         if (turret.transform.Find(ConstNames.SpawnPoint))
         {
@@ -108,12 +121,15 @@ public class Node : MonoBehaviour
             }
         }
 
-        Destroy(turret);
+        PlayerStarts.money -= turret.GetComponent<Turret>().UpgradePrice;
         //destroy or move old turret back
+        turret.GetComponent<Turret>().RejectAmmo();
+        GameObject upgrade = turret.GetComponent<Turret>().GetUpgrade();
+        Destroy(turret);
 
-        PlayerStarts.money -= turretBlueprint.upgradeCost;
+ 
         //should we use the pool here? 
-        GameObject tmp_turret = (GameObject)Instantiate(turretBlueprint.upgradedPrefab, GetBuildPosition(), Quaternion.identity);
+        GameObject tmp_turret = (GameObject)Instantiate(upgrade, GetBuildPosition(), Quaternion.identity, objectHolder.transform);
 
         turret = tmp_turret;
 
@@ -128,21 +144,22 @@ public class Node : MonoBehaviour
 
         gobj.transform.position = transform.position;
         gobj.transform.rotation = transform.rotation;
+
         gobj.SetActive(true);
     }
+
     public void SellTurret()
     {
-        if(turret.gameObject.GetComponent<Turret>()!= null)
+        if (turret.gameObject.GetComponent<Turret>() != null)
             turret.gameObject.GetComponent<Turret>().RejectAmmo();
-        if (turret.gameObject.GetComponent<FactoryBase>() != null)
-            turret.gameObject.GetComponent<FactoryBase>().RejectAmmo();
 
         PlayerStarts.money += turretBlueprint.GetSellAmount();
-        GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
+        GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity, objectHolder.transform);
         Destroy(effect, 5f);
 
         Destroy(turret);
         turretBlueprint = null;
+        isUpgraded = false;
     }
 
     void OnMouseEnter()

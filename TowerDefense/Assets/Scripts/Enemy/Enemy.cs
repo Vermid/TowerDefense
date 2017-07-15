@@ -88,55 +88,56 @@ public class Enemy : MonoBehaviour
         return groundType;
     }
 
-    public void GetDamage(float amount, Enums.WeaponType wType)
+    public bool GetDamage(float amount, Enums.WeaponType wType)
     {
         switch (wType)
         {
             case Enums.WeaponType.Pierce:
                 if (armorType == Enums.ArmorType.Light)
                 {
-                    TakeDamage(amount * fullDamage);
+                   return TakeDamage(amount * fullDamage);
                 }
                 else if (armorType == Enums.ArmorType.Heavy)
                 {
-                    TakeDamage(amount * halfDamage);
+                    return TakeDamage(amount * halfDamage);
                 }
                 else if (armorType == Enums.ArmorType.Magic)
                 {
-                    TakeDamage(amount * lowDamage);
+                    return TakeDamage(amount * lowDamage);
                 }
                 break;
 
             case Enums.WeaponType.Normal:
                 if (armorType == Enums.ArmorType.Light)
                 {
-                    TakeDamage(amount * halfDamage);
+                    return TakeDamage(amount * halfDamage);
                 }
                 else if (armorType == Enums.ArmorType.Heavy)
                 {
-                    TakeDamage(amount * fullDamage);
+                    return TakeDamage(amount * fullDamage);
                 }
                 else if (armorType == Enums.ArmorType.Magic)
                 {
-                    TakeDamage(amount * lowDamage);
+                    return TakeDamage(amount * lowDamage);
                 }
                 break;
 
             case Enums.WeaponType.Chaotic:
                 if (armorType == Enums.ArmorType.Light)
                 {
-                    TakeDamage(amount * halfDamage);
+                    return TakeDamage(amount * halfDamage);
                 }
                 else if (armorType == Enums.ArmorType.Heavy)
                 {
-                    TakeDamage(amount * halfDamage);
+                    return TakeDamage(amount * halfDamage);
                 }
                 else if (armorType == Enums.ArmorType.Magic)
                 {
-                    TakeDamage(amount * fullDamage);
+                    return TakeDamage(amount * fullDamage);
                 }
                 break;
         }
+        return false;
     }
 
     private void Update()
@@ -152,14 +153,15 @@ public class Enemy : MonoBehaviour
         return health;
     }
 
-    public void TakeDamage(float amount)
+    public bool TakeDamage(float amount)
     {
         health -= amount;
         if (health <= 0 && !isDead)
         {
-            isDead = true;
             Die();
+            return isDead = true;
         }
+        return false;
     }
     private float fillbar(float value, float inMin, float inMax, float outMin, float outMax)
     {
