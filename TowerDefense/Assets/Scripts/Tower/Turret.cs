@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using DragonBones;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Assets.Scripts;
 using Transform = UnityEngine.Transform;
+using System.Collections;
 
 public class Turret : MonoBehaviour
 {
@@ -16,20 +12,30 @@ public class Turret : MonoBehaviour
     private float range = 15f;
 
     [SerializeField]
+    private float damage;
+    [SerializeField]
     private bool groundType;
 
     [SerializeField]
     private bool airType;
 
     [SerializeField]
-    private Enums.WeaponType waeponType;
+    private Enums.WeaponType weaponType;
 
-    [Header("Bullets(Default)")]
     [SerializeField]
     private float fireRate = 1f;
 
     [SerializeField]
-    private GameObject bullet;
+    private GameObject ammo;
+
+    [SerializeField]
+    private int cost;
+
+    [SerializeField]
+    private GameObject nextUpgrade;
+
+    [SerializeField]
+    private int upgradeCost;
 
     [Header("Laser")]
     [SerializeField]
@@ -39,19 +45,28 @@ public class Turret : MonoBehaviour
     private float slowAmount = .5f;
 
     [SerializeField]
-    private int damageOverTime = 30;
-
-    //[SerializeField]
-    //private LineRenderer lineRenderer;
-
-    [SerializeField]
     private ParticleSystem impactEffect;
-
-    //[SerializeField]
-    //private Light impactlight;
 
     [SerializeField]
     private ParticleSystem laserEffect;
+
+    //[SerializeField]
+    //private Light impactlight;
+    //[SerializeField]
+    //private LineRenderer lineRenderer;
+
+    [Header("Mine Factory")]
+    [SerializeField]
+    private bool useFactory = false;
+
+    [SerializeField]
+    private float timeBetweenSpawn = 5F;
+
+    [SerializeField]
+    private int maxMines = 5;
+
+    [SerializeField]
+    private int mineRadius = 5;
 
     [Header("Unity Setup Fields")]
 
@@ -65,8 +80,7 @@ public class Turret : MonoBehaviour
     private float turnSpeed = 10f;
     #endregion
 
-    public GameObject LaserGameObject;
-
+    // public GameObject LaserGameObject;
     private float fireCoundown = 0f;
     private Transform target;
     private int particleSystemCounter = 0;
@@ -77,16 +91,40 @@ public class Turret : MonoBehaviour
     private bool startwave = true;
     private GameObject[] enemysThisWave;
 
+    private float countDown = 2F;
+    private Vector3 offsett;
+    private float radius;
+    private Transform[] targets;
+
+    #region Prooooops
+    public int Price { get { return cost; } }
+    public int UpgradePrice { get { return upgradeCost; } }
+    public float Range { get { return range; } }
+    public float Damage { get { return damage; } }
+    public float FireRate { get { return fireRate; } }
+    public bool AirType { get { return airType; } }
+    public bool GroundType { get { return groundType; } }
+    public Enums.WeaponType WeaponType { get { return weaponType; } }
+    #endregion
+
     void Start()
     {
         startPosition = GameObject.FindGameObjectWithTag(ConstNames.Start).transform;
         bulletHolder = gameObject.transform.Find("BulletHolder");
         objectPool = GameObject.FindGameObjectWithTag("ObjectPool").transform;
 
-        if (!useLaser)
+        if (!useLaser && !useFactory)
         {
             var laserHolder = partToRotate.gameObject.transform.Find("LaserObjectHolder");
             laserHolder.gameObject.SetActive(false);
+            Bullet.damage = damage;
+        }
+        if (useFactory)
+        {
+            radius = GetComponentInChildren<SphereCollider>().radius = mineRadius;
+            radius /= 2;
+            Mine.damage = damage;
+            SpawnPoint();
         }
     }
 
@@ -155,54 +193,68 @@ public class Turret : MonoBehaviour
             CancelInvoke("UpdateTarget");
             target = null;
         }
-
-        if (target != null)
+        if (useFactory)
         {
-            LockOnTarget(target);
-
-            if (useLaser)
+            //spawn enemys only if the coundown reaches 0
+            if (countDown <= 0F && bulletHolder.childCount < maxMines)
             {
-                Laser();
+                StartCoroutine(Spawn());
+                //set the coundown back to any time you want  in this chase tmeBetweenWaves
+                countDown = timeBetweenSpawn;
             }
-            else
-            {
-                if (fireCoundown <= 0f)
-                {
-                    Shoot();
-                    //why 1/1 ? this dont make sense try somewthing out with the variables!!
-                    fireCoundown = 1f / fireRate;
-                }
-                //subs a seconds(framerate) away frm the firecoundown
-                fireCoundown -= Time.deltaTime;
-            }
+            //count in seconds?
+            countDown -= Time.deltaTime; //time past since last frames
         }
         else
         {
-            var bulletHolder = gameObject.transform.Find("BulletHolder");
-            if (useLaser)
+            if (target != null)
             {
-                //       if (lineRenderer.enabled)
-                //{
-                //  lineRenderer.enabled = false;
-                //use play for particle effect or they will just despawn 
-                //         impactEffect.Stop();
-                // impactlight.enabled = false;
-                //      LaserGameObject.SetActive(false);
-                //  }
-                //  lineRenderer.SetPosition(0, transform.position);
-                //  lineRenderer.SetPosition(1, transform.position);
-                impactEffect.Stop();
-                // impactlight.enabled = false;
-                LaserGameObject.SetActive(false);
-            }
-            if (!useLaser && bulletHolder.childCount > 0)
-            {
-                for (int i = 0; i < bulletHolder.childCount; i++)
+                LockOnTarget(target);
+
+                if (useLaser)
                 {
-                    bulletHolder.GetChild(i).gameObject.SetActive(false);
+                    Laser();
+                }
+                else
+                {
+                    if (fireCoundown <= 0f)
+                    {
+                        Shoot();
+                        //why 1/1 ? this dont make sense try somewthing out with the variables!!
+                        fireCoundown = 1f / fireRate;
+                    }
+                    //subs a seconds(framerate) away frm the firecoundown
+                    fireCoundown -= Time.deltaTime;
                 }
             }
-            UpdateTarget();
+            else
+            {
+                var bulletHolder = gameObject.transform.Find("BulletHolder");
+                if (useLaser)
+                {
+                    //       if (lineRenderer.enabled)
+                    //{
+                    //  lineRenderer.enabled = false;
+                    //use play for particle effect or they will just despawn 
+                    //         impactEffect.Stop();
+                    // impactlight.enabled = false;
+                    //      LaserGameObject.SetActive(false);
+                    //  }
+                    //  lineRenderer.SetPosition(0, transform.position);
+                    //  lineRenderer.SetPosition(1, transform.position);
+                    impactEffect.Stop();
+                    // impactlight.enabled = false;
+                    ammo.SetActive(false);
+                }
+                if (!useLaser && bulletHolder.childCount > 0)
+                {
+                    for (int i = 0; i < bulletHolder.childCount; i++)
+                    {
+                        bulletHolder.GetChild(i).gameObject.SetActive(false);
+                    }
+                }
+                UpdateTarget();
+            }
         }
     }
 
@@ -222,10 +274,45 @@ public class Turret : MonoBehaviour
         partToRotate.rotation = Quaternion.Euler(rotation.x, rotation.y, 0f);
     }
 
+    public void RejectAmmo()
+    {
+        CancelInvoke("UpdateTarget");
+        if (!useLaser)
+        {
+            for (int i = 0; i < bulletHolder.childCount; i++)
+            {
+                bulletHolder.GetChild(i).parent = objectPool;
+            }
+        }
+    }
+
+    #region Gun
+    void Shoot()
+    {
+        if (ammo == null)
+            return;
+        GameObject bulletObj = ObjectPool_Zaim.current.GetPoolObject(ammo.name);
+
+        if (bulletObj == null)
+            return;
+
+        bulletObj.transform.position = firePoint.position;
+        bulletObj.transform.rotation = firePoint.rotation;
+
+        bulletObj.transform.parent = bulletHolder.transform;
+        bulletObj.SetActive(true);
+
+        Bullet b = bulletObj.GetComponent<Bullet>();
+        if (b != null)
+            b.Seek(target, weaponType, this);
+    }
+    #endregion
+
+    #region Laser
     void Laser()
     {
         BoxCollider targetCollider = target.GetComponent<BoxCollider>();
-        ParticleSystem ptsystem = LaserGameObject.GetComponent<ParticleSystem>();
+        ParticleSystem ptsystem = ammo.GetComponent<ParticleSystem>();
 
         for (int i = 0; i < ptsystem.trigger.maxColliderCount; i++)
         {
@@ -237,8 +324,8 @@ public class Turret : MonoBehaviour
             ptsystem.trigger.SetCollider(particleSystemCounter++, targetCollider);
         }
 
-        LaserGameObject.SetActive(true);
-        target.GetComponent<Enemy>().GetDamage(damageOverTime * Time.deltaTime, waeponType);
+        ammo.SetActive(true);
+        target.GetComponent<Enemy>().GetDamage(damage * Time.deltaTime, weaponType);
 
         target.GetComponent<EnemyMovement>().Slow(slowAmount);
 
@@ -263,39 +350,79 @@ public class Turret : MonoBehaviour
         impactEffect.transform.position = target.position + offSett;
         // impactEffect.transform.rotation = Quaternion.LookRotation(dir);
     }
+    #endregion
 
-    void Shoot()
+    #region Mine Factory
+    IEnumerator Spawn()
     {
-        if (bullet == null)
-            return;
-        GameObject bulletObj = ObjectPool_Zaim.current.GetPoolObject(bullet.name);
-
-        if (bulletObj == null)
-            return;
-
-        bulletObj.transform.position = firePoint.position;
-        bulletObj.transform.rotation = firePoint.rotation;
-
-        bulletObj.transform.parent = bulletHolder.transform;
-        bulletObj.SetActive(true);
-
-        Bullet b = bulletObj.GetComponent<Bullet>();
-        if (b != null)
-            b.Seek(target, waeponType);
+        //call the funktion and pas the wanted enemysName into
+        SpawnMine(ammo.name);
+        //wait .5 seconds for the next Enemy
+        yield return new WaitForSeconds(.5F);
     }
 
-    public void RejectAmmo()
+    /// <summary>
+    /// This will set the mine around the next Waypoint
+    /// </summary>
+    void SpawnPoint()
     {
-        CancelInvoke("UpdateTarget");
-        if (!useLaser)
+        if (groundType)
         {
-            for (int i = 0; i < bulletHolder.childCount; i++)
+            targets = Waypoints.GroundPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
             {
-                bulletHolder.GetChild(i).parent = objectPool;
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    bulletHolder.transform.position = waypoint.position;
+                }
+            }
+        }
+        if (airType)
+        {
+            targets = Waypoints.AirPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
+            {
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    bulletHolder.transform.position = waypoint.position;
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Spawns the wanted Object 
+    /// </summary>
+    /// <param name="name"></param>
+    void SpawnMine(string name)
+    {
+        GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name);
+        if (obj == null)
+            return;
+
+        float offsetX = Random.Range(-radius, radius);
+        float offsetZ = Random.Range(-radius, radius);
+
+        offsett = new Vector3(offsetX, 0, offsetZ);
+
+        obj.transform.position = bulletHolder.transform.position + offsett;
+        obj.transform.rotation = bulletHolder.transform.rotation;
+        obj.SetActive(true);
+
+        obj.GetComponent<Mine>().SetWeapontType(weaponType);
+        obj.transform.parent = bulletHolder;
+    }
+    #endregion
+
+    #region General
     //draw a gizmo when the gameobject is selected to see the range from the turret
     void OnDrawGizmosSelected()
     {
@@ -303,4 +430,28 @@ public class Turret : MonoBehaviour
         //draw a DrawWireSphere  
         Gizmos.DrawWireSphere(transform.position, range);
     }
+
+    public void Kill()
+    {
+        killCounter++;
+    }
+    private int killCounter = 0;
+
+    public int GetKillCounter()
+    {
+        return killCounter;
+    }
+
+    public GameObject GetUpgrade()
+    {
+        if (nextUpgrade != null)
+        {
+            return nextUpgrade;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    #endregion  
 }

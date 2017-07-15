@@ -11,6 +11,7 @@ public class BuildManager : MonoBehaviour
     public NodeUI nodeUi;
     public GameObject sellEffect;
     #endregion
+
     private TurretBlueprint turretToBuild;
     private Node selectedNode;
 
@@ -31,7 +32,7 @@ public class BuildManager : MonoBehaviour
     public bool HasMoney
     {
         //if turrettobuild is null there is no turret on this position
-        get { return PlayerStarts.money >= turretToBuild.cost; }
+        get { return PlayerStarts.money >= turretToBuild.GetCostAmount(); }
     }
 
 

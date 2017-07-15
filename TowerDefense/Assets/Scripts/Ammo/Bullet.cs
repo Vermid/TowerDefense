@@ -17,17 +17,18 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private float splashRadius = 0;
     [SerializeField]
-    private int damage = 50;
+    public static float damage = 50;
     #endregion
 
     private Enums.WeaponType weaponType;
 
     private Transform target;
-
-    public void Seek(Transform _target ,Enums.WeaponType wType)
+    private Turret parent;
+    public void Seek(Transform _target, Enums.WeaponType wType, Turret _parent)
     {
         target = _target;
         weaponType = wType;
+        parent = _parent;
     }
 
     // Update is called once per frame
@@ -118,8 +119,12 @@ public class Bullet : MonoBehaviour
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
         {
-           // e.TakeDamage(damage);
-            e.GetDamage(damage, weaponType);
+            // e.TakeDamage(damage);
+           bool kill =  e.GetDamage(damage, weaponType);
+            if(kill)
+            {
+                parent.Kill();
+            }
         }
     }
 

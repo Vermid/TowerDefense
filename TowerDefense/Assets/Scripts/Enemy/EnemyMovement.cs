@@ -73,7 +73,7 @@ public class EnemyMovement : MonoBehaviour
                 target = Waypoints.GroundPoints[wavePointIndex];
             }
 
-            //when you sub the target place - the current you get the dir where you need to go
+            //when you0 sub the target place - the current you get the dir where you need to go
             Vector3 dir = target.position - transform.position;
             //add some movement with Translate.
             //normalize the dir before you * speed it or the end result can change and the Obejects move faster or slower
