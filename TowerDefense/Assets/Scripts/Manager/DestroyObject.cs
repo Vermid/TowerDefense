@@ -10,7 +10,7 @@ public class DestroyObject : MonoBehaviour
     #endregion
     void OnEnable()
     {
-        Invoke(ConstNames.Destroy, destroyTimer);
+        Invoke(ConstNames.Dest, destroyTimer);
     }
 
     void Destroy()

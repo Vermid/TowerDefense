@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts
 {
-    class Enums
+    public class Enums
     {
 
         public enum WeaponType

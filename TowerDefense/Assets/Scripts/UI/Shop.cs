@@ -6,7 +6,10 @@ public class Shop : MonoBehaviour
     public TurretBlueprint standradTurret;
     public TurretBlueprint missileTurret;
     public TurretBlueprint laserTurret;
-    public TurretBlueprint mineFactory;
+    public TurretBlueprint mineFactoryAir;
+    public TurretBlueprint mineFactoryGround;
+    public TurretBlueprint bFG;
+
     #endregion
 
     private BuildManager buildManager;
@@ -19,12 +22,14 @@ public class Shop : MonoBehaviour
     {
         buildManager.SelectTurretToBuild(standradTurret);
         Debug.Log("Standard");
+        Toggle();
     }
     //call comes from GUI
     public void SelectMissileTurret()
     {
         buildManager.SelectTurretToBuild(missileTurret);
         Debug.Log("Missile");
+        Toggle();
     }
 
     //call comes from GUI
@@ -32,12 +37,26 @@ public class Shop : MonoBehaviour
     {
         buildManager.SelectTurretToBuild(laserTurret);
         Debug.Log("Laser");
+        Toggle();
     }
 
-    public void SelectMineFactory()
+    public void SelectMineFactoryAir()
     {
-        buildManager.SelectTurretToBuild(mineFactory);
-        Debug.Log("MineFactory");
+        buildManager.SelectTurretToBuild(mineFactoryAir);
+        Debug.Log("Air MineFactory");
+        Toggle();
+    }
+
+    public void SelectMineFactoryGround()
+    {
+        buildManager.SelectTurretToBuild(mineFactoryGround);
+        Debug.Log("Ground MineFactory");
+        Toggle();
+    }
+
+    private void Toggle()
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
     }
 
 }

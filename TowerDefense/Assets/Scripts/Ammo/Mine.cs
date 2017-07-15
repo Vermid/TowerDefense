@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Assets.Scripts;
 
 public class Mine : MonoBehaviour
 {
@@ -10,16 +11,23 @@ public class Mine : MonoBehaviour
     [SerializeField]
     private float splashRadius = 0;
     [SerializeField]
-    private int damage = 50;
+    public static float damage = 50;
+
     #endregion
 
     private GameObject parent;
+    private Enums.WeaponType wType;
 
     void Start()
     {
         parent = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
     }
 
+    public void SetWeapontType(Enums.WeaponType _wType)
+    {
+        wType = _wType;
+
+    }
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == ConstNames.Enemy)
@@ -74,7 +82,7 @@ public class Mine : MonoBehaviour
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
         {
-            e.TakeDamage(damage);
+            e.GetDamage(damage,wType);
         }
     }
 

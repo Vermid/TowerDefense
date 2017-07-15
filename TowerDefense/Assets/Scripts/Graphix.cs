@@ -4,7 +4,7 @@ using UnityEngine;
 public class Graphix : MonoBehaviour
 {
     [SerializeField]
-    private string name;
+    private string armaturName;
 
     [SerializeField]
     private string status;
@@ -21,15 +21,15 @@ public class Graphix : MonoBehaviour
 
     public string GetArmaureName()
     {
-        return name;
+        return armaturName;
     }
 
     void Start()
     {
-        UnityFactory.factory.LoadDragonBonesData(name + "/" + name + "_ske");
-        UnityFactory.factory.LoadTextureAtlasData(name + "/" + name + "_tex");
+        UnityFactory.factory.LoadDragonBonesData(armaturName + "/" + armaturName + "_ske");
+        UnityFactory.factory.LoadTextureAtlasData(armaturName + "/" + armaturName + "_tex");
 
-        armatureComponent = UnityFactory.factory.BuildArmatureComponent(armature, name, null, "", transform.gameObject);
+        armatureComponent = UnityFactory.factory.BuildArmatureComponent(armature, armaturName, null, "", transform.gameObject);
         //        armatureComponent.animation.timeScale *= 0.5f;
 
 <<<<<<< HEAD:TowerDefense/Assets/Graphix.cs

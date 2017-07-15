@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Runtime.Remoting;
 using UnityEngine.UI;
+using Assets.Scripts;
 
 public class FactoryBase : MonoBehaviour
 {
@@ -15,21 +16,36 @@ public class FactoryBase : MonoBehaviour
     private float timeBetweenSpawn = 5F;
 
     [SerializeField]
+    public float damage = Mine.damage;
+
+    [SerializeField]
     private int maxMines = 5;
 
     [SerializeField]
     private int mineRadius = 5;
+
+    [SerializeField]
+    private bool groundType;
+
+    [SerializeField]
+    private bool airType;
+
+    [SerializeField]
+    private Enums.WeaponType wType;
+
     #endregion
 
     private float countDown = 2F;
-    private Transform children;
+    private Transform bulletHolder;
+    private Transform objectPool;
     private Vector3 offsett;
     private float radius;
     private Transform[] targets;
 
     void Start()
     {
-        children = transform.Find(ConstNames.SpawnPoint).transform;
+        bulletHolder = transform.Find("BulletHolder").transform;
+        objectPool = GameObject.FindGameObjectWithTag("ObjectPool").transform;
 
         radius = GetComponentInChildren<SphereCollider>().radius = mineRadius;
         radius /= 2;
@@ -39,7 +55,7 @@ public class FactoryBase : MonoBehaviour
     void Update()
     {
         //spawn enemys only if the coundown reaches 0
-        if (countDown <= 0F && children.childCount <= maxMines)
+        if (countDown <= 0F && bulletHolder.childCount < maxMines)
         {
             StartCoroutine(Spawn());
             //set the coundown back to any time you want  in this chase tmeBetweenWaves
@@ -62,16 +78,34 @@ public class FactoryBase : MonoBehaviour
     /// </summary>
     void SpawnPoint()
     {
-        targets = Waypoints.Points;
-
-        float distance = Mathf.Infinity;
-
-        foreach (Transform waypoint in targets)
+        if (groundType)
         {
-            if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+            targets = Waypoints.GroundPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
             {
-                distance = Vector3.Distance(waypoint.position, transform.position);
-                children.transform.position = waypoint.position;
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    bulletHolder.transform.position = waypoint.position;
+                }
+            }
+        }
+        if (airType)
+        {
+            targets = Waypoints.AirPoints;
+
+            float distance = Mathf.Infinity;
+
+            foreach (Transform waypoint in targets)
+            {
+                if (Vector3.Distance(waypoint.position, transform.position) <= distance)
+                {
+                    distance = Vector3.Distance(waypoint.position, transform.position);
+                    bulletHolder.transform.position = waypoint.position;
+                }
             }
         }
     }
@@ -91,18 +125,27 @@ public class FactoryBase : MonoBehaviour
 
         offsett = new Vector3(offsetX, 0, offsetZ);
 
-        obj.transform.position = children.transform.position + offsett;
-        obj.transform.rotation = children.transform.rotation;
+        obj.transform.position = bulletHolder.transform.position + offsett;
+        obj.transform.rotation = bulletHolder.transform.rotation;
         obj.SetActive(true);
 
-        obj.transform.parent = children;
+        obj.GetComponent<Mine>().SetWeapontType(wType);
+        obj.transform.parent = bulletHolder;
+    }
+
+    public void RejectAmmo()
+    {
+
+        for (int i = 0; i < bulletHolder.childCount; i++)
+        {
+            bulletHolder.GetChild(i).parent = objectPool;
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if (children != null)
-            Gizmos.DrawWireSphere(children.transform.position, mineRadius * 2);
+        if (bulletHolder != null)
+            Gizmos.DrawWireSphere(bulletHolder.transform.position, mineRadius * 2);
     }
-
 }
