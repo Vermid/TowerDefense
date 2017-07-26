@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour {
+public class CameraScript : MonoBehaviour
+{
     #region Inspector
     [SerializeField]
     private float panBorderThickness = 50;
@@ -54,8 +55,6 @@ public class CameraScript : MonoBehaviour {
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, MIN_X, MAX_X), 0, Mathf.Clamp(transform.position.z, MIN_Z, MAX_Z));
     }
 
-
-
     void OnMouseDown()
     {
         LastPosition();
@@ -65,7 +64,6 @@ public class CameraScript : MonoBehaviour {
     {
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-
     }
 
     void OnMouseDrag()
@@ -141,7 +139,7 @@ public class CameraScript : MonoBehaviour {
                 {
                     TouchCameraMove(Vector3.left, transform.position);
                 }
-             //   oldTouchPositions[0] = newTouchPosition;
+                //   oldTouchPositions[0] = newTouchPosition;
             }
         }
     }
@@ -152,6 +150,6 @@ public class CameraScript : MonoBehaviour {
         float yvalue = Mathf.Abs(oldPos.y - currentPos.y);
 
         Vector2 dir = new Vector2(xvalue, yvalue);
-        transform.Translate(oldPos * cameraSpeed *Time.deltaTime, Space.World);
+        transform.Translate(oldPos * cameraSpeed * Time.deltaTime, Space.World);
     }
 }

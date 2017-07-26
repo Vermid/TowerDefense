@@ -13,10 +13,12 @@ public class Shop : MonoBehaviour
     #endregion
 
     private BuildManager buildManager;
+
     void Start()
     {
         buildManager = BuildManager.instance;
     }
+
     //call comes from GUI
     public void SelectStandardTurret()
     {
@@ -54,9 +56,8 @@ public class Shop : MonoBehaviour
         Toggle();
     }
 
-    private void Toggle()
+    public void Toggle()
     {
-        gameObject.SetActive(!gameObject.activeSelf);
+        ShopMenu.current.Toggle();
     }
-
 }

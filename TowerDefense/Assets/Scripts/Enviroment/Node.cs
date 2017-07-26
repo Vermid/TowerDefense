@@ -47,30 +47,6 @@ public class Node : MonoBehaviour
             buildManager.DeselectNode();
         }
     }
-    //change all the mouse action for Touch actions (android)
-    void OnMouseDown()
-    {
-        //if shop ui is over a node you cant build you will click on the shopUi turret 
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-        CameraScript.current.LastPosition();
-
-        if (turret != null)
-        {
-            buildManager.SelectNode(this);
-            return;
-        }
-
-        if (!buildManager.CanBuild)
-            return;
-
-        BuildTurret(buildManager.GetTurretToBuild());
-    }
-
-    void OnMouseDrag()
-    {
-        CameraScript.current.DragObject();
-    }
 
     void BuildTurret(TurretBlueprint bluePrint)
     {
@@ -179,6 +155,33 @@ public class Node : MonoBehaviour
         {
             rend.material.color = notEnoughMoneyColor;
         }
+    }
+
+    //change all the mouse action for Touch actions (android)
+    void OnMouseDown()
+    {
+        CameraScript.current.LastPosition();
+
+        //if shop ui is over a node you cant build you will click on the shopUi turret 
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (turret != null)
+        {
+            Debug.Log("TURRET");
+            buildManager.SelectNode(this);
+            return;
+        }
+
+        if (!buildManager.CanBuild)
+            return;
+
+        BuildTurret(buildManager.GetTurretToBuild());
+    }
+
+    void OnMouseDrag()
+    {
+        CameraScript.current.DragObject();
     }
 
     void OnMouseExit()

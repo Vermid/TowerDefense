@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 ///TODO: think how to use keybinding shop ||build turret || upgrade
-public class Settings : MonoBehaviour
+public class Options : MonoBehaviour
 {
     [SerializeField]
     private Text soundText;
@@ -19,7 +19,7 @@ public class Settings : MonoBehaviour
     private bool specialEffects;
 
     private int qLevel;
-    public static Settings current;
+    public static Options current;
 
     private void Awake()
     {
@@ -50,7 +50,6 @@ public class Settings : MonoBehaviour
         }
     }
 
-
     public void QualityLow()
     {
         QualitySettings.SetQualityLevel(0);
@@ -70,8 +69,6 @@ public class Settings : MonoBehaviour
 
     public void ChangeSoundVolume()
     {
-
-
         int i;
         if (Int32.TryParse(soundText.text, out i))
         {
@@ -90,6 +87,14 @@ public class Settings : MonoBehaviour
         PlayerPrefs.SetInt("SavedSettings", 1);
 
         PlayerPrefs.Save();
+        Toggle();
+    }
+
+    public void CancelSettings()
+    {
+        //cancel the settings and rollback the stats
+        QualitySettings.SetQualityLevel(qLevel);
+        Toggle();
     }
 
     public void Toggle()
