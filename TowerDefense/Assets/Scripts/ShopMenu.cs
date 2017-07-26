@@ -7,10 +7,18 @@ public class ShopMenu : MonoBehaviour
 
     private GameObject world;
     public LayerMask layer;
+    private LayerMask startLayer;
 
+    public static ShopMenu current;
+
+    private void Awake()
+    {
+        current = this;
+    }
     private void Start()
     {
         world = GameObject.FindGameObjectWithTag("World");
+        startLayer = world.layer;
     }
 
     void Update()
@@ -20,10 +28,12 @@ public class ShopMenu : MonoBehaviour
             Toggle();
         }
     }
-    private void Toggle()
+    public void Toggle()
     {
-        world.layer = layer;
         ui.SetActive(!ui.activeSelf);
+        Debug.Log(ui.activeInHierarchy);
+        //world.layer = layer;
+         world.layer = (ui.activeInHierarchy ? layer : startLayer);
 
     }
 
