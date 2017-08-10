@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
     #region Inspector
     [SerializeField]
     private float panBorderThickness = 50;
@@ -69,7 +72,6 @@ public class CameraScript : MonoBehaviour
     {
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-
     }
 
     void OnMouseDrag()

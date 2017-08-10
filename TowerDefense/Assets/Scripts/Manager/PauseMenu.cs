@@ -56,7 +56,7 @@ public class PauseMenu : MonoBehaviour
     public void GetSettings()
     {
         Toggle();
-        Settings.current.Toggle();
+        Options.current.Toggle();
     }
 
     public void Exit()

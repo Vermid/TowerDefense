@@ -23,14 +23,12 @@ public class BuildManager : MonoBehaviour
         instance = this;
     }
 
-    public bool CanBuild
-    {
+    public bool CanBuild {
         //if turrettobuild is null there is no turret on this position
         get { return turretToBuild != null; }
     }
 
-    public bool HasMoney
-    {
+    public bool HasMoney {
         //if turrettobuild is null there is no turret on this position
         get { return PlayerStarts.money >= turretToBuild.GetCostAmount(); }
     }
@@ -65,5 +63,10 @@ public class BuildManager : MonoBehaviour
     public TurretBlueprint GetTurretToBuild()
     {
         return turretToBuild;
+    }
+
+    public TurretBlueprint RejectTurretBluePrint()
+    {
+        return turretToBuild = null;
     }
 }

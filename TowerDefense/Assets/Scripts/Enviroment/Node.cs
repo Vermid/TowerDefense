@@ -50,6 +50,7 @@ public class Node : MonoBehaviour
             buildManager.DeselectNode();
         }
     }
+<<<<<<< HEAD
 
     //OnMouseDown works on android too
     void OnMouseDown()
@@ -75,6 +76,8 @@ public class Node : MonoBehaviour
     {
         CameraScript.current.DragObject();
     }
+=======
+>>>>>>> refs/remotes/origin/master
 
     void BuildTurret(TurretBlueprint bluePrint)
     {
@@ -192,6 +195,33 @@ public class Node : MonoBehaviour
         {
             renderer.material.color = notEnoughMoneyColor;
         }
+    }
+
+    //change all the mouse action for Touch actions (android)
+    void OnMouseDown()
+    {
+        CameraScript.current.LastPosition();
+
+        //if shop ui is over a node you cant build you will click on the shopUi turret 
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (turret != null)
+        {
+            Debug.Log("TURRET");
+            buildManager.SelectNode(this);
+            return;
+        }
+
+        if (!buildManager.CanBuild)
+            return;
+
+        BuildTurret(buildManager.GetTurretToBuild());
+    }
+
+    void OnMouseDrag()
+    {
+        CameraScript.current.DragObject();
     }
 
     void OnMouseExit()
