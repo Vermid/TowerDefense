@@ -41,17 +41,18 @@ public class Enemy : MonoBehaviour
 
     public static Enemy current;
 
-    private float fullDamage = 1;
+    #region Privates
+    private float fullDamage = 1F;
     private float halfDamage = .5F;
     private float lowDamage = .25F;
-
     private float health;
     private float respawn = 5;
     private bool spawn = true;
     private Animator anim;
     private bool isDead = false;
+    private EnemyMovement enemyMovement;
+    #endregion
 
-    public EnemyMovement enemyMovement;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -73,9 +74,14 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         isDead = false;
-        //health = startHealth;
-        //speed = startSpeed;
-        // spawn = false;
+    }
+
+    private void Update()
+    {
+        var result = Interpolate(health, 0, startHealth, 0, 1);
+
+        if (result != healthBar.fillAmount)
+            healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, result, Time.deltaTime * healthSpeed);
     }
 
     public bool GetAirType()
@@ -88,7 +94,7 @@ public class Enemy : MonoBehaviour
         return groundType;
     }
 
-    public bool GetDamage(float amount, Enums.WeaponType wType)
+    public bool CalculateDamage(float amount, Enums.WeaponType wType)
     {
         switch (wType)
         {
@@ -140,14 +146,6 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    private void Update()
-    {
-        var result = fillbar(health, 0, startHealth, 0, 1);
-
-        if (result != healthBar.fillAmount)
-            healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, result, Time.deltaTime * healthSpeed);
-    }
-
     public float GetHealth()
     {
         return health;
@@ -163,7 +161,17 @@ public class Enemy : MonoBehaviour
         }
         return false;
     }
-    private float fillbar(float value, float inMin, float inMax, float outMin, float outMax)
+
+    /// <summary>
+    /// Value is the current Health, inMin and outMin should be 0, inMax is maxHealth and outMax is maxOutput
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="inMin"></param>
+    /// <param name="inMax"></param>
+    /// <param name="outMin"></param>
+    /// <param name="outMax"></param>
+    /// <returns></returns>
+    private float Interpolate(float value, float inMin, float inMax, float outMin, float outMax)
     {
         return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
@@ -178,7 +186,10 @@ public class Enemy : MonoBehaviour
         GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(deathEffect.name);
 
         if (gobj == null)
+        {
+            Debug.LogWarning(deathEffect.name + " is NULL");
             return;
+        }
 
         gobj.transform.position = transform.position;
         gobj.transform.rotation = transform.rotation;

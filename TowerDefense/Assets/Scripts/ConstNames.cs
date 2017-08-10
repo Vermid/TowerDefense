@@ -15,15 +15,15 @@ public class ConstNames : MonoBehaviour
     public const string ObjectPool = "ObjectPool";
     public const string MineFactory = "MineFactory";
     public const string TurretHolder = "TurretHolder";
+    public const string BulletHolder = "BulletHolder";
+    public const string LaserObjectHolder = "LaserObjectHolder";
+    public const string Turret = "Turret";
 
-
-    
     #endregion
 
     #region Function
 
     public const string UpdateTarget = "UpdateTarget";
     public const string Dest = "Destroy";
-
     #endregion
 }

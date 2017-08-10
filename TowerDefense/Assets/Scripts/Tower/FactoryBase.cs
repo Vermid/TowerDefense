@@ -117,9 +117,10 @@ public class FactoryBase : MonoBehaviour
     void SpawnMine(string name)
     {
         GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name);
-        if (obj == null)
+        {
+            Debug.LogWarning(name + " is NULL");
             return;
-
+        }
         float offsetX = Random.Range(-radius, radius);
         float offsetZ = Random.Range(-radius, radius);
 
@@ -129,7 +130,7 @@ public class FactoryBase : MonoBehaviour
         obj.transform.rotation = bulletHolder.transform.rotation;
         obj.SetActive(true);
 
-        obj.GetComponent<Mine>().SetWeapontType(wType);
+       // obj.GetComponent<Mine>().SetWeapontType(wType,this);
         obj.transform.parent = bulletHolder;
     }
 

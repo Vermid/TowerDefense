@@ -4,9 +4,10 @@ using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
+
     #region Inspector
     [HideInInspector]
-    public bool isUpgraded = false;
+    public bool lastUpgrade = false;
 
     [SerializeField]
     private Color hoverColor;
@@ -16,7 +17,7 @@ public class Node : MonoBehaviour
 
     [SerializeField]
     private Vector3 positionOffset;
-    // [Header("This is needed for the Player Turret")]
+    [Header("This is needed for Testing turrets on Game Start")]
     [HideInInspector]
     public GameObject turret;
     public GameObject startTurret;
@@ -24,20 +25,22 @@ public class Node : MonoBehaviour
     [HideInInspector]
     public TurretBlueprint turretBlueprint;
     #endregion
-    private BuildManager buildManager;
 
-    private Renderer rend;
+    #region Privates
+    private BuildManager buildManager;
+    private Renderer renderer;
     private Color startColor;
     private GameObject objectHolder;
     private GameObject turretHolder;
+    #endregion
+
     void Start()
     {
         buildManager = BuildManager.instance;
-        rend = GetComponent<Renderer>();
-        startColor = rend.material.color;
+        renderer = GetComponent<Renderer>();
+        startColor = renderer.material.color;
         objectHolder = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
         objectHolder = GameObject.FindGameObjectWithTag(ConstNames.TurretHolder);
-
 
         if (startTurret != null)
         {
@@ -47,7 +50,8 @@ public class Node : MonoBehaviour
             buildManager.DeselectNode();
         }
     }
-    //change all the mouse action for Touch actions (android)
+
+    //OnMouseDown works on android too
     void OnMouseDown()
     {
         //if shop ui is over a node you cant build you will click on the shopUi turret 
@@ -92,7 +96,10 @@ public class Node : MonoBehaviour
         GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(buildManager.buildEffect.name);
 
         if (gobj == null)
+        {
+            Debug.LogWarning(buildManager.buildEffect.name + " is NULL");
             return;
+        }
 
         gobj.transform.position = transform.position;
         gobj.transform.rotation = transform.rotation;
@@ -110,7 +117,6 @@ public class Node : MonoBehaviour
             return;
         }
 
-
         if (turret.transform.Find(ConstNames.SpawnPoint))
         {
             var children = turret.transform.Find(ConstNames.SpawnPoint);
@@ -123,24 +129,31 @@ public class Node : MonoBehaviour
 
         PlayerStarts.money -= turret.GetComponent<Turret>().UpgradePrice;
         //destroy or move old turret back
+        //reject Ammo before you destroy Turret or Objectpool will run into an ERROR
         turret.GetComponent<Turret>().RejectAmmo();
         GameObject upgrade = turret.GetComponent<Turret>().GetUpgrade();
         Destroy(turret);
 
- 
-        //should we use the pool here? 
+
+        //if player can place more than 10 times the same turret than use ObjectPool 
         GameObject tmp_turret = (GameObject)Instantiate(upgrade, GetBuildPosition(), Quaternion.identity, objectHolder.transform);
 
         turret = tmp_turret;
 
-        isUpgraded = true;
+        if (upgrade.GetComponent<Turret>().GetUpgrade() == null)
+        {
+            lastUpgrade = true;
+        }
 
         Debug.Log("Turret Upgraded");
 
         GameObject gobj = ObjectPool_Zaim.current.GetPoolObject(buildManager.buildEffect.name);
 
         if (gobj == null)
+        {
+            Debug.LogWarning(buildManager.buildEffect.name + " is NULL");
             return;
+        }
 
         gobj.transform.position = transform.position;
         gobj.transform.rotation = transform.rotation;
@@ -153,13 +166,13 @@ public class Node : MonoBehaviour
         if (turret.gameObject.GetComponent<Turret>() != null)
             turret.gameObject.GetComponent<Turret>().RejectAmmo();
 
-        PlayerStarts.money += turretBlueprint.GetSellAmount();
+        PlayerStarts.money += turret.gameObject.GetComponent<Turret>().Price / 2;
         GameObject effect = (GameObject)Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity, objectHolder.transform);
         Destroy(effect, 5f);
 
         Destroy(turret);
         turretBlueprint = null;
-        isUpgraded = false;
+        lastUpgrade = false;
     }
 
     void OnMouseEnter()
@@ -173,18 +186,18 @@ public class Node : MonoBehaviour
         if (buildManager.HasMoney)
         {
             //change the color from the node
-            rend.material.color = hoverColor;
+            renderer.material.color = hoverColor;
         }
         else
         {
-            rend.material.color = notEnoughMoneyColor;
+            renderer.material.color = notEnoughMoneyColor;
         }
     }
 
     void OnMouseExit()
     {
         //change the color from the node
-        rend.material.color = startColor;
+        renderer.material.color = startColor;
     }
 
     public Vector3 GetBuildPosition()

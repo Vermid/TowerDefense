@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
+
     #region Inspector
     [SerializeField]
     private Transform spawnPoint;
@@ -17,9 +18,13 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private List<WaveGenerator> listOfGameObjects = new List<WaveGenerator>();
     #endregion
-   // private bool nextWave = false;
+
+    #region Privates
+    // private bool nextWave = false;
     private int waveIndex = 0;
     //private float countDown = 2F;
+    #endregion
+
     public static int EnemysInScene = 0;
 
     void Update()
@@ -61,6 +66,10 @@ public class WaveManager : MonoBehaviour
             SpawnWave();
         }
     }
+
+    /// <summary>
+    /// Spawns All Enemies at on place 
+    /// </summary>
     void SpawnWave()
     {
         //loop the Inspector list
@@ -106,7 +115,6 @@ public class WaveManager : MonoBehaviour
     {
         GameObject[] EnemysAlive = GameObject.FindGameObjectsWithTag(ConstNames.Enemy);
 
-        //        foreach (GameObject obj in EnemysAlive)
         for (int i = 0; i < EnemysAlive.Length; i++)
         {
             if (EnemysAlive[i].GetComponent<Enemy>().GetHealth() > 0)
@@ -118,8 +126,8 @@ public class WaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Wants the Enemy Name "Fast" or "Heavy".
-    /// this gets than a gameobject of the enemy type and move the positiona and rotaten and set it than to true
+    /// Wants the Enemy Tag "Fast" or "Heavy".
+    /// this gets than a gameobject of the enemy type and move the position and rotation and set it than to true
     /// </summary>
     /// <param name="name"></param>
     bool SpawnEnemy(string name)
@@ -127,11 +135,13 @@ public class WaveManager : MonoBehaviour
         //get from the pool a single gameobject from Type of the wanted name  "Fast","Heavy",etc
         GameObject obj = ObjectPool_Zaim.current.GetPoolObject(name);
         if (obj == null)
+        {
+            Debug.LogWarning(name + " is NULL");
             return false;
+        }
 
         if (!obj.GetComponent<Enemy>().GetRespawnTimer())
             return false;
-       // var enemy = obj.GetComponent<Enemy>();
 
         //sets the position from the map
         obj.transform.position = spawnPoint.transform.position;

@@ -14,7 +14,13 @@ public class EnemyMovement : MonoBehaviour
 
     [SerializeField]
     private float resetSpeed;
+
+    [SerializeField]
+    private Enemy enemy;
+
     #endregion
+
+    #region Privates
     private Transform target;
     private int wavePointIndex = 0;
     private float speed = 10;
@@ -23,7 +29,7 @@ public class EnemyMovement : MonoBehaviour
     private bool moving = false;
     private Animator anim;
     private bool lastBreath = false;
-    public Enemy enemy;
+    #endregion
 
     void Start()
     {
@@ -42,6 +48,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    //this let the monster start to move 
     void OnEnable()
     {
         //this resets the Gameobject with the start Values

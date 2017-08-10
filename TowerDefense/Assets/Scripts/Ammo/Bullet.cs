@@ -119,8 +119,7 @@ public class Bullet : MonoBehaviour
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
         {
-            // e.TakeDamage(damage);
-           bool kill =  e.GetDamage(damage, weaponType);
+           bool kill =  e.CalculateDamage(damage, weaponType);
             if(kill)
             {
                 parent.Kill();

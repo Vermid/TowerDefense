@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour {
+public class CameraScript : MonoBehaviour
+{
+
     #region Inspector
     [SerializeField]
     private float panBorderThickness = 50;
@@ -14,7 +16,7 @@ public class CameraScript : MonoBehaviour {
     private BoxCollider mapBox;
     #endregion
 
-    public static CameraScript current;
+    #region Privates
     private Vector3 screenPoint;
     private Vector3 offset;
     private float MIN_X;
@@ -25,6 +27,9 @@ public class CameraScript : MonoBehaviour {
     private float MAX_Z;
     private Vector2 oldTouchVector;
     private float oldTouchDistance;
+    #endregion
+
+    public static CameraScript current;
 
     Vector2?[] oldTouchPositions = {
         null,
@@ -35,6 +40,7 @@ public class CameraScript : MonoBehaviour {
     {
         current = this;
     }
+
     void Start()
     {
         MIN_X = mapBox.bounds.min.x;
@@ -53,8 +59,6 @@ public class CameraScript : MonoBehaviour {
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, MIN_X, MAX_X), 0, Mathf.Clamp(transform.position.z, MIN_Z, MAX_Z));
     }
-
-
 
     void OnMouseDown()
     {
@@ -88,7 +92,7 @@ public class CameraScript : MonoBehaviour {
 
     private void Move_Camera_Destktop()
     {
-        //why is this reverse
+        //reverse
         if (Input.GetKey(KeyCode.W))
         {
             transform.Translate(Vector3.back * cameraSpeed * Time.deltaTime, Space.World);
@@ -141,7 +145,7 @@ public class CameraScript : MonoBehaviour {
                 {
                     TouchCameraMove(Vector3.left, transform.position);
                 }
-             //   oldTouchPositions[0] = newTouchPosition;
+                //   oldTouchPositions[0] = newTouchPosition;
             }
         }
     }
@@ -152,6 +156,6 @@ public class CameraScript : MonoBehaviour {
         float yvalue = Mathf.Abs(oldPos.y - currentPos.y);
 
         Vector2 dir = new Vector2(xvalue, yvalue);
-        transform.Translate(oldPos * cameraSpeed *Time.deltaTime, Space.World);
+        transform.Translate(oldPos * cameraSpeed * Time.deltaTime, Space.World);
     }
 }
