@@ -5,6 +5,8 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField]
     private string levelLoad = "Level01";
+    [SerializeField]
+    private Scene nextLevel;
 
     [SerializeField] private SceneFader sceneFader;
     public void Play()

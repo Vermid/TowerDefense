@@ -1,7 +1,8 @@
-﻿using System.Security.Policy;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
+//TODO: RENAME CLASS
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField]
@@ -9,6 +10,9 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField]
     private GameObject ui;
+
+    [SerializeField]
+    private Text score;
 
     void Update()
     {
@@ -46,6 +50,7 @@ public class PauseMenu : MonoBehaviour
     {
         Toggle();
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        WaveManager.EnemysInScene = 0;
     }
 
     public void GetSettings()
@@ -64,5 +69,19 @@ public class PauseMenu : MonoBehaviour
     {
         Toggle();
         sceneFader.FadeTo(ConstNames.MainMenu);
+    }
+
+    private void GetScore()
+    {
+
+        GameObject[] allTurrets = GameObject.FindGameObjectsWithTag(ConstNames.Turret);
+        int counter = 0;
+        foreach (GameObject turret in allTurrets)
+        {
+          counter +=  turret.GetComponent<Turret>().GetKillCounter();
+        }
+        score.text = counter.ToString();
+        // add score to the game and cal it here (playerstarts [change also the class name])
+        //score.text = 
     }
 }

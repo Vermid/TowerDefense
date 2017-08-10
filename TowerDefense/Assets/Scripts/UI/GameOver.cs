@@ -55,6 +55,7 @@ public class GameOver : MonoBehaviour
     {
         Toggle();
         sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        WaveManager.EnemysInScene = 0;
     }
 
     public void Exit()

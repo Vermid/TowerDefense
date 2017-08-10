@@ -29,15 +29,12 @@ public class NodeUI : MonoBehaviour
 
         transform.position = target.GetBuildPosition();
 
-        //sellAmount.text = "$" + target.turretBlueprint.GetSellAmount();
-        
         Turret turret = target.turret.GetComponent<Turret>();
         killCounter.text = "Kills: " + turret.GetKillCounter();
         sellAmount.text = "$" + turret.Price / 2;
 
-        if (!target.isUpgraded)
+        if (!target.lastUpgrade)
         {
-            //  upgradeCost.text = "$" + target.turretBlueprint.GetUpgradeCostAmount();
             upgradeCost.text = "$" + turret.UpgradePrice;
 
             upgradeButton.interactable = true;
@@ -66,11 +63,6 @@ public class NodeUI : MonoBehaviour
         ui.SetActive(true);
     }
 
-    private void Update()
-    {
-        //if (target != null)
-          //  killCounter.text = "Kills: " + target.turret.GetComponent<Turret>().GetKillCounter();
-    }
     private void Start()
     {
         Hide();

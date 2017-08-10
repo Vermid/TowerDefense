@@ -12,13 +12,12 @@ public class ObjectPool_Zaim : MonoBehaviour
     [SerializeField]
     private List<GameObject> listOfGameObjects = new List<GameObject>();
     #endregion
+
     private Dictionary<string, List<GameObject>> ObjectPoolByName;
     private List<GameObject> gameObjectsList;
-
-    public static ObjectPool_Zaim current;
-
     private GameObject gobjHolder;
 
+    public static ObjectPool_Zaim current;
 
     void Awake()
     {
@@ -76,7 +75,7 @@ public class ObjectPool_Zaim : MonoBehaviour
             }
 
             //If the there are no objetcs generate new objects and add them to the list 
-
+            Debug.LogWarning("New Object: " + wantedGameObject);
             //save the value from the dictionary by writing the wanted key
             //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
             foreach (GameObject gobList in listOfGameObjects)

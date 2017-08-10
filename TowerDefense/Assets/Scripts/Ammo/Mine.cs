@@ -17,17 +17,21 @@ public class Mine : MonoBehaviour
 
     private GameObject parent;
     private Enums.WeaponType wType;
+    private Turret turret;
 
     void Start()
     {
         parent = GameObject.FindGameObjectWithTag(ConstNames.ObjectPool);
     }
 
-    public void SetWeapontType(Enums.WeaponType _wType)
+    public void SetWeapontType(Enums.WeaponType _wType, Turret _turret)
     {
         wType = _wType;
-
+        turret = _turret;
     }
+
+
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == ConstNames.Enemy)
@@ -82,7 +86,11 @@ public class Mine : MonoBehaviour
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
         {
-            e.GetDamage(damage,wType);
+            bool kill = e.CalculateDamage(damage, wType);
+            if (kill)
+            {
+                turret.Kill();
+            }
         }
     }
 

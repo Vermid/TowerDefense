@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
+<<<<<<< HEAD
+
+=======
+>>>>>>> refs/remotes/origin/master
     #region Inspector
     [SerializeField]
     private float panBorderThickness = 50;
@@ -15,7 +19,7 @@ public class CameraScript : MonoBehaviour
     private BoxCollider mapBox;
     #endregion
 
-    public static CameraScript current;
+    #region Privates
     private Vector3 screenPoint;
     private Vector3 offset;
     private float MIN_X;
@@ -26,6 +30,9 @@ public class CameraScript : MonoBehaviour
     private float MAX_Z;
     private Vector2 oldTouchVector;
     private float oldTouchDistance;
+    #endregion
+
+    public static CameraScript current;
 
     Vector2?[] oldTouchPositions = {
         null,
@@ -36,6 +43,7 @@ public class CameraScript : MonoBehaviour
     {
         current = this;
     }
+
     void Start()
     {
         MIN_X = mapBox.bounds.min.x;
@@ -86,7 +94,7 @@ public class CameraScript : MonoBehaviour
 
     private void Move_Camera_Destktop()
     {
-        //why is this reverse
+        //reverse
         if (Input.GetKey(KeyCode.W))
         {
             transform.Translate(Vector3.back * cameraSpeed * Time.deltaTime, Space.World);
