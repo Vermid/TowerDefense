@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectPool_Zaim : MonoBehaviour
@@ -62,38 +63,57 @@ public class ObjectPool_Zaim : MonoBehaviour
     /// <returns></returns>
     public GameObject GetPoolObject(string wantedGameObject)
     {
-        if (ObjectPoolByName.ContainsKey(wantedGameObject))
-        {
-            var value = ObjectPoolByName[wantedGameObject];
-            for (int i = 0; i < value.Count; i++)
-            {
-                //check if the elementList[i] is activ or not
-                if (value[i].activeInHierarchy == false)
-                {
-                    return value[i];
-                }
-            }
+        GameObject value = ObjectPoolByName.FirstOrDefault(o => o.Key == wantedGameObject).Value.FirstOrDefault(v => v.activeInHierarchy == false);
 
-            //If the there are no objetcs generate new objects and add them to the list 
+        if (value == null)
+        {
             Debug.LogWarning("New Object: " + wantedGameObject);
-            //save the value from the dictionary by writing the wanted key
-            //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
-            foreach (GameObject gobList in listOfGameObjects)
+            var gobj = listOfGameObjects.FirstOrDefault(l => l.name == wantedGameObject);
+            if (gobj != null)
             {
-                if (gobList == null)
-                    return null;
-                if (gobList.name == wantedGameObject)
-                {
-                    GameObject obj = (GameObject)Instantiate(gobList);
-                    obj.SetActive(false);
-                    //add the new map to the list from the value
-                    // wyh did i add this?
-                    value.Add(obj);
-                    obj.transform.parent = gobjHolder.transform;
-                    return obj;
-                }
+                GameObject obj = (GameObject)Instantiate(gobj);
+                obj.SetActive(false);
+                //add the new map to the list from the value
+                ObjectPoolByName.FirstOrDefault(o => o.Key.Contains(wantedGameObject)).Value.Add(obj);
+                obj.transform.parent = gobjHolder.transform;
+                return obj;
             }
-        }   
-        return null;
+            return null;
+        }
+        return value;
     }
+    #region Old code
+    //    if (ObjectPoolByName.ContainsKey(wantedGameObject))
+    //    {
+    //        // var value = ObjectPoolByName[wantedGameObject];
+    //        //for (int i = 0; i < value.Count; i++)
+    //        //{
+    //        //    //check if the elementList[i] is activ or not
+    //        //    if (value[i].activeInHierarchy == false)
+    //        //    {
+    //        //        return value[i];
+    //        //    }
+    //        //}
+    //        //If the there are no objetcs generate new objects and add them to the list 
+    //        Debug.LogWarning("New Object: " + wantedGameObject);
+    //        //save the value from the dictionary by writing the wanted key
+    //        //Instantiate from the value  with the index 0 (it doesn't matter waht index you pick they are all the same in this value
+    //        foreach (GameObject gobList in listOfGameObjects)
+    //        {
+    //            if (gobList == null)
+    //                return null;
+    //            if (gobList.name == wantedGameObject)
+    //            {
+    //                GameObject obj = (GameObject)Instantiate(gobList);
+    //                obj.SetActive(false);
+    //                //add the new map to the list from the value
+    //                value.Add(obj);
+    //                obj.transform.parent = gobjHolder.transform;
+    //                return obj;
+    //            }
+    //        }
+    //    }   
+    //    return null;
+    //}
+    #endregion
 }
