@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/master
     #region Inspector
     [SerializeField]
     private float panBorderThickness = 50;

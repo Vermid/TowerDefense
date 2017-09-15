@@ -30,10 +30,6 @@ public class ShopMenu : MonoBehaviour
     }
     public void Toggle()
     {
-<<<<<<< HEAD:TowerDefense/Assets/Scripts/UI/ShopMenu.cs
-       // world.layer = layer;
-=======
->>>>>>> refs/remotes/origin/master:TowerDefense/Assets/Scripts/ShopMenu.cs
         ui.SetActive(!ui.activeSelf);
         Debug.Log(ui.activeInHierarchy);
         //world.layer = layer;
